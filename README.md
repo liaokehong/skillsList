@@ -1,4 +1,4 @@
-# Claude Code Skills 个人使用清单
+# Skills 个人使用清单
 
 > 我的工作：企业内部数字化建设——需求与 PRD、交互与 UI 规范、内部工具、算力服务器管理、AI 辅助开发。
 > 技能按「**角色 → 工作流**」组织。仓库内置 Agent 指令，**把地址发给任何 AI 编码助手即可自动安装**——不需要跑任何脚本。
@@ -46,7 +46,7 @@
 
 ## 💬 人类怎么用（vibe coding 方式）
 
-把下面的话发给你的 AI 编码助手（Claude Code / ZCode / Cursor…）：
+把下面的话发给你的 AI 编码助手（ZCode / Cursor / Codex 等）：
 
 ```text
 帮我按照 https://github.com/liaokehong/skillsList 安装技能清单（读取并遵循其中的 README 和 AGENTS.md）
