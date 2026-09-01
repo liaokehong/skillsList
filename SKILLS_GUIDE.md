@@ -1,133 +1,155 @@
 # Claude Code Skills 个人使用清单
 
-> 我在用的 Claude Code / 编码智能体技能与插件清单：来源、安装、触发方式、使用示例。
+> 按「**角色 → 工作流**」组织。我的工作：企业内部数字化建设——需求与 PRD、交互与 UI 规范、内部工具（如部门提单系统）、算力服务器管理、AI 辅助开发。
 >
-> - 首次核验：2026-08-28 · 最近修订：2026-09-01
+> - 首次核验：2026-08-28 · 按角色重组：2026-09-01
 > - 新设备一键安装与每日自动同步见 [README](./README.md)
 
-## 目录
+## 角色总览
 
-1. [Superpowers（综合开发能力）](#1-superpowers综合开发能力)
-2. [OpenSpec（规范驱动开发 / SDD）](#2-openspec规范驱动开发--sdd)
-3. [Remember（跨会话记忆）](#3-remember跨会话记忆)
-4. [Firecrawl（深度调研 / 网页爬取）](#4-firecrawl深度调研--网页爬取)
-5. [Task Master（需求管理 & 任务拆分）](#5-task-master需求管理--任务拆分)
-6. [基础技能四件套（skills.sh 生态）](#6-基础技能四件套skillssh-生态)
-7. [交互设计技能包（前端设计工作流）](#7-交互设计技能包前端设计工作流)
-8. [自研技能（个人沉淀）](#8-自研技能个人沉淀)
+| 角色 | 技能 | 干什么 |
+|------|------|--------|
+| 🧭 产品 / 需求 | `clarify-first` → `product-design` | 模糊想法对齐 → 产出多角色 PRD |
+| 🎨 交互 / 视觉设计 | owl-listener 七件 + `ui-ux-pro-max` + `frontend-design` + 动效两件 | 交互规格 → 视觉实现 → 交付自审 → 动效打磨 |
+| 🛠 开发落地 | `openspec` + `agent-browser` | 规范驱动 AI 实现 → 浏览器自动化自测 |
+| 🔍 调研 / 信息 | Firecrawl（30+ 子技能）+ `find-skills` | 网页调研、深度报告、发现新技能 |
+| 🧠 通用沉淀 | `self-improving-agent` | 把纠错与踩坑沉淀为可审计的行为改进 |
+
+> 已移除（与当前工作关联弱）：~~Superpowers~~（TDD/调试/代码审查等开发工作流）、~~Remember~~（跨会话记忆）、~~Task Master~~（任务拆分管理）。
 
 ---
 
-## 1. Superpowers（综合开发能力）
+## 一、产品 / 需求角色
 
-> **来源**: `superpowers@claude-plugins-official` （marketplace）
-> **仓库**: https://github.com/obra/superpowers.git
+### 工作流
 
-提供一套完整的开发工作流能力，让 Claude 掌握 brainstorming、子代理驱动开发、代码审查、系统化调试、TDD 等方法论。
+```
+模糊想法 ─► ① clarify-first 对齐 ─► ② product-design 出 PRD ─► 交给设计 / 开发角色
+```
 
-### 包含的 Skill
+### clarify-first（自研）
 
-| Skill | 用途 | 触发方式 |
-|-------|------|----------|
-| `brainstorming` | 头脑风暴，梳理需求和方案 | 讨论需求时自动激活 |
-| `using-git-worktrees` | 使用 git worktree 隔离开发 | 并行开发任务时使用 |
-| `subagent-driven-development` | 子代理驱动开发，分解任务并行执行 | 大型任务自动使用 |
-| `test-driven-development` | 红/绿 TDD 开发流程 | 编写代码时使用 |
-| `systematic-debugging` | 系统化调试方法 | 遇到 bug 时使用 |
-| `executing-plans` | 按计划执行开发任务 | 有明确计划时 |
-| `writing-plans` | 编写开发计划 | `/plan` 或规划时 |
-| `requesting-code-review` | 请求代码审查 | 完成代码后 |
-| `receiving-code-review` | 接收并处理代码审查反馈 | 收到 review 后 |
-| `writing-skills` | 编写新的自定义 skill | 需要扩展能力时 |
-| `verification-before-completion` | 完成前验证 | 任务收尾阶段 |
-| `finishing-a-development-branch` | 完成开发分支的收尾工作 | 开发完成时 |
-| `dispatching-parallel-agents` | 调度并行子代理 | 多任务并行时 |
+模糊需求开工前先对齐再执行：调研 → 澄清 → 产出《任务简报》。
+
+- **触发**：需求缺少明确的"好"的标准、返工成本高时；创意/内容类任务（脚本、分镜、官网、工作台）、"优化一下"类口头需求
+- **文件**：随本仓库 `skills/clarify-first/` 分发，安装脚本自动落到 `~/.agents/skills/`
+
+### product-design（自研）
+
+把对齐后的产品想法变成多角色可直接使用的 PRD（设计 / 开发 / 测试 / 管理分区）。
+
+- **触发**："我想做一个…""把这个想法整理成需求""写个 PRD""功能设计"
+- **衔接**：想法过于模糊时先走 `clarify-first` 对齐，再产出 PRD
+- **文件**：随本仓库 `skills/product-design/` 分发
+
+---
+
+## 二、交互 / 视觉设计角色
+
+> 组成：`ui-ux-pro-max`（nextlevelbuilder）+ owl-listener/designer-skills 七核心 + `frontend-design`（anthropics 官方）+ emilkowalski 动效两件
+
+### 工作流（四阶段接力）
+
+```
+PRD 定稿 ─► ① 交互规格(owl-listener) ─► ② 视觉方向+实现(frontend-design + ui-ux-pro-max) ─► ③ 交付自审(heuristic-evaluation) ─► ④ 动效打磨(improve-animations，可选)
+```
+
+### Skill 一览
+
+| Skill | 来源 | 阶段 | 用途 |
+|-------|------|------|------|
+| `user-flow-diagram` | owl-listener | ① | 画用户路径、决策点、分支逻辑 |
+| `navigation-patterns` | owl-listener | ① | 选导航模式（tab/抽屉/层级/枢纽） |
+| `state-machine` | owl-listener | ① | 穷举组件状态（空/加载/成功/失败…）——交互混乱的病根 |
+| `form-design` | owl-listener | ① | 表单端到端设计：字段顺序、分组、校验 |
+| `loading-states` | owl-listener | ① | 加载态设计 |
+| `error-handling-ux` | owl-listener | ① | 错误的预防、检测、恢复路线 |
+| `heuristic-evaluation` | owl-listener | ③ | 尼尔森十原则专家评审 + 严重度打分 |
+| `frontend-design` | anthropics/skills 官方 | ② | 视觉设计方向、排版、避免模板感 |
+| `ui-ux-pro-max` | nextlevelbuilder | ② | 全能"设计智能"：组件选型、布局、无障碍、技术栈写法 |
+| `improve-animations` / `animate` | emilkowalski | ④ | 动效审计与实现（打磨手感） |
 
 ### 使用示例
 
-```
-# 启动头脑风暴
-/superpowers:brainstorming 我需要做一个用户登录系统
+**① 动手前想清楚**（产出《交互规格》文档，不是代码）：
 
-# 使用 TDD 开发
-/superpowers:test-driven-development 编写一个表单验证函数
-
-# 系统调试
-/superpowers:systematic-debugging 这个API返回500错误
 ```
+我们要做 XX 项目的 YY 功能，先用 user-flow-diagram 画出用户路径，
+再用 state-machine 穷举核心组件的所有状态，把 loading、错误处理、
+反馈方式定下来，产出一份《交互规格》文档。
+```
+
+细抠某块直接点名：「用 form-design 的规范过一遍这个表单」「用 navigation-patterns 决定侧边栏还是顶部导航」。
+
+**② 动手时做对**：
+
+```
+先给这个落地页定视觉方向，再按照《交互规格》实现页面，
+用 ui-ux-pro-max 的规范选组件和布局。
+```
+
+**③ 做完后验收**（每个项目交付前都跑）：
+
+```
+用 heuristic-evaluation 按尼尔森十原则给这个界面打分，列出问题和严重度。
+```
+
+**④ 动效打磨**（稳定后可选）：`用 improve-animations 审一下列表页的过渡动效`
+
+发现问题回 ① 补规格再改。
 
 ---
 
-## 2. OpenSpec（规范驱动开发 / SDD）
+## 三、开发落地角色（AI 辅助）
+
+### 工作流
+
+```
+PRD ─► ① openspec 写规范 ─► ② AI 按规范实现 ─► ③ openspec validate 校验 ─► ④ agent-browser 自测
+```
+
+### OpenSpec（规范驱动开发 / SDD）
 
 > **来源**: npm 全局包 `@fission-ai/openspec`（本机 v1.10.0）
 > **仓库**: https://github.com/Fission-AI/OpenSpec
 
 AI 原生的规范驱动开发系统。先写规范（Spec），再驱动 AI 按规范实现代码。
 
-### 安装状态
-
-已全局安装，CLI 命令：`openspec`
-
-### 使用方式
-
 ```bash
-# 初始化项目
-openspec init
-
-# 创建规范
-openspec new
-
-# 查看规范状态
-openspec list
-
-# 验证规范
-openspec validate
+openspec init      # 项目内初始化
+openspec new       # 创建规范
+openspec list      # 查看规范状态
+openspec validate  # 验证实现是否符合规范
 ```
+
+工作流：`init` → 编写规范（描述需求和验收标准）→ 让 AI 读规范并实现 → `validate` 校验。
+
+### agent-browser（浏览器自动化）
+
+> **来源**: vercel-labs/agent-browser（738K 安装）
+
+面向 AI 的浏览器自动化 CLI：导航、填表、点击、截图、测试 web 应用。
+
+```
+用 agent-browser 打开 localhost:3000，截图看下提单表单在手机尺寸下的效果
+```
+
+---
+
+## 四、调研 / 信息支撑角色
 
 ### 工作流
 
-1. `openspec init` — 在项目中初始化 OpenSpec
-2. 编写规范文件（`.md` 格式），描述需求和验收标准
-3. 让 Claude Code 读取规范并按照规范实现
-4. `openspec validate` — 验证实现是否符合规范
-
----
-
-## 3. Remember（跨会话记忆）
-
-> **来源**: `remember@claude-plugins-official` （marketplace）
-
-连续记忆系统。自动提取、总结、压缩对话内容到分层日志中，让 Claude 记住之前做过的事情。
-
-### 能力
-
-- 自动记录对话摘要
-- 跨会话记忆（Claude 记得昨天做了什么）
-- 分层日志（daily/weekly/monthly）
-- 自动压缩旧对话
-
-### 使用方式
-
 ```
-# 查看记忆
-/remember
-
-# 记忆按照时间分层存储，Claude 会自动读取相关记忆
+要外部信息 ─► 快查: firecrawl-search / scrape ─► 深度: firecrawl-deep-research / firecrawl-agent ─► 缺能力: find-skills 找新 skill
 ```
 
-Remember 插件**自动在后台工作**，无需手动触发。每次对话结束后，它会自动提取关键信息并存储，下次对话时 Claude 会自动加载相关记忆。
-
----
-
-## 4. Firecrawl（深度调研 / 网页爬取）
+### Firecrawl
 
 > **仓库**: https://github.com/firecrawl/firecrawl-claude-plugin.git
 > **规模**: 共 30+ 个 skill，以下为常用子集（2026-09-01 按实际安装核对）
 
 强大的网页抓取和爬取工具。将任意网站转为干净的 Markdown 或结构化数据，支持 AI agent 自主多源数据收集。
-
-### 常用 Skill
 
 | Skill | 用途 |
 |-------|------|
@@ -153,174 +175,54 @@ Remember 插件**自动在后台工作**，无需手动触发。每次对话结�
 # 爬取单个页面
 /firecrawl:firecrawl-scrape https://docs.example.com
 
-# 深度搜索调研
-/firecrawl:firecrawl-agent 帮我调研 React 19 的新特性，整理成表格
+# 深度调研：帮我调研电池行业 MES 系统的主流方案，整理成表格
+/firecrawl:firecrawl-agent …
 
 # 爬取整个文档站
 /firecrawl:firecrawl-crawl https://docs.example.com --maxPages 50
 ```
 
----
+### find-skills（发现新技能）
 
-## 5. Task Master（需求管理 & 任务拆分）
+> **来源**: vercel-labs/skills（3.1M 安装）
 
-> **来源**: npm 全局包 `task-master-ai`（本机 v0.43.1）
-> **仓库**: https://github.com/eyaltoledano/claude-task-master
-
-AI 驱动的开发任务管理系统。将大需求拆分为可执行的小任务，跟踪进度，管理依赖。
-
-### 安装状态
-
-已全局安装，包含：
-- CLI：`task-master`
-- MCP Server：`task-master-mcp`（可直接在 Claude Code 中使用）
-
-### CLI 使用方式
-
-```bash
-# 初始化项目
-task-master init
-
-# 创建任务
-task-master add "实现用户登录功能"
-
-# 列出任务
-task-master list
-
-# 查看任务详情
-task-master show <task-id>
-
-# 更新任务状态
-task-master update <task-id> --status in-progress
-```
-
-### MCP 配置
-
-在项目根目录创建或编辑 `.mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "task-master": {
-      "command": "npx",
-      "args": ["task-master-mcp"]
-    }
-  }
-}
-```
-
-配置后重启 Claude Code，即可在对话中直接使用 task-master 管理任务：
+"找个能做 X 的 skill" 时自动触发：
 
 ```
-帮我创建一个任务列表，包含用户认证模块的所有子任务
-查看当前项目的任务进度
-把 task-3 标记为已完成
-```
-
----
-
-## 6. 基础技能四件套（skills.sh 生态）
-
-> **来源**: skills.sh 注册表，`npx skills` CLI 安装（装入 `~/.agents/skills/`）
-
-四个通用基础能力，均已核验落盘。
-
-| Skill | 来源 | 用途 |
-|-------|------|------|
-| `frontend-design` | anthropics/skills（官方，824K 安装） | 构建/重塑 UI 时的视觉设计方向、排版、避免模板感 |
-| `find-skills` | vercel-labs/skills（3.1M 安装） | 发现并安装其他 agent skill（"找个能做 X 的 skill"时自动触发） |
-| `agent-browser` | vercel-labs/agent-browser（738K 安装） | 面向 AI 的浏览器自动化 CLI：导航、填表、点击、截图、测试 web 应用 |
-| `self-improving-agent` | zhaono1/agent-playbook（33K 安装） | 把失败/用户纠正沉淀为可审计的行为改进 |
-
-### 使用示例
-
-```
-# frontend-design / agent-browser 靠自然语言触发
-帮我给这个落地页做个视觉方案        → frontend-design
-用 agent-browser 打开 localhost:3000 截图看下效果
-
-# find-skills：想找某领域能力时
 帮我找数据分析相关的 skill
+```
 
-# self-improving-agent：出错或被纠正后
+---
+
+## 五、通用沉淀
+
+### self-improving-agent
+
+> **来源**: zhaono1/agent-playbook（33K 安装）
+
+把失败和用户纠正沉淀为可审计的行为改进，越用越顺手。
+
+```
 刚才那个方案为什么不行，沉淀成经验
 ```
 
 ---
 
-## 7. 交互设计技能包（前端设计工作流）
+## 安装速查
 
-> **来源**: skills.sh 生态（装入 `~/.agents/skills/`，已核验）
-> 组成：`ui-ux-pro-max` + owl-listener/designer-skills 七核心 + emilkowalski/skills 两件
+| 类目 | 安装方式 |
+|------|----------|
+| skills.sh 生态（设计包 / 四件套 / 动效） | `npx skills add <repo>@<skill> -g -y`，须逐个装；一键脚本见 [README](./README.md) |
+| OpenSpec | `npm i -g @fission-ai/openspec` |
+| Firecrawl | 编辑器插件市场安装 firecrawl 插件 |
+| 自研技能（product-design / clarify-first） | 随本仓库 `skills/` 目录分发，install 脚本自动拷贝到 `~/.agents/skills/` |
 
-### 包含的 Skill
+## 快速参考表（按角色）
 
-| Skill | 来源 | 用途 |
-|-------|------|------|
-| `ui-ux-pro-max` | nextlevelbuilder | 全能"设计智能"：设计/评审/修复界面，组件选型、布局、无障碍、技术栈写法 |
-| `user-flow-diagram` | owl-listener | 画用户路径、决策点、分支逻辑 |
-| `navigation-patterns` | owl-listener | 选导航模式（tab/抽屉/层级/枢纽） |
-| `state-machine` | owl-listener | 穷举组件状态（空/加载/成功/失败…）——交互混乱的病根 |
-| `form-design` | owl-listener | 表单端到端设计：字段顺序、分组、校验 |
-| `loading-states` | owl-listener | 加载态设计 |
-| `error-handling-ux` | owl-listener | 错误的预防、检测、恢复路线 |
-| `heuristic-evaluation` | owl-listener | 尼尔森十原则专家评审 + 严重度打分（交付前自审） |
-| `improve-animations` / `animate` | emilkowalski | 动效审计与实现（可选，打磨手感） |
-
-### 三阶段工作流（接力使用）
-
-```
-PRD 定稿 ─► ①交互设计(owl-listener 七件) ─► ②写代码实现(ui-ux-pro-max) ─► ③交付前自审(heuristic-evaluation)
-```
-
-**① 动手前想清楚**（产出《交互规格》文档，不是代码）：
-
-```
-我们要做 XX 项目的 YY 功能，先用 user-flow-diagram 画出用户路径，
-再用 state-machine 穷举核心组件的所有状态，把 loading、错误处理、
-反馈方式定下来，产出一份《交互规格》文档。
-```
-
-细抠某块直接点名：「用 form-design 的规范过一遍这个表单」「用 navigation-patterns 决定侧边栏还是顶部导航」。
-
-**② 动手时做对**：
-
-```
-按照《交互规格》实现这个页面，用 ui-ux-pro-max 的规范选组件和布局。
-```
-
-**③ 做完后验收**（每个项目交付前都跑）：
-
-```
-用 heuristic-evaluation 按尼尔森十原则给这个界面打分，列出问题和严重度。
-```
-
-发现问题回 ① 补规格再改。动效稳定后可选跑 `improve-animations`。
-
----
-
-## 8. 自研技能（个人沉淀）
-
-> **来源**: 自己编写，手工放入 `~/.agents/skills/`（没有上游仓库，注意随本仓库自行备份）
-
-| Skill | 用途 | 触发示例 |
-|-------|------|----------|
-| `product-design` | 把模糊的产品想法变成多角色可直接使用的 PRD（设计/开发/测试/管理分区） | "我想做一个…""把这个想法整理成需求""写个 PRD" |
-| `clarify-first` | 模糊需求开工前先对齐再执行：调研 → 澄清 → 产出《任务简报》 | 需求模糊、"优化一下"类任务开工前 |
-
-两者衔接：想法过于模糊时 `product-design` 会先走 `clarify-first` 对齐，再产出 PRD。
-
----
-
-## 快速参考表
-
-| 技能 | 触发方式 | 用途场景 |
+| 角色 | 触发方式 | 关键场景 |
 |------|----------|----------|
-| **Superpowers** | `/superpowers:<skill>` 或自动 | 全流程开发 |
-| **OpenSpec** | CLI `openspec` 命令 | 规范先行开发 |
-| **Remember** | 后台自动 | 跨会话记忆 |
-| **Firecrawl** | `/firecrawl:<skill>` | 网页调研 |
-| **Task Master** | CLI 或 MCP 自动 | 任务管理 |
-| **基础四件套** | 自然语言触发 | 视觉设计/找 skill/浏览器自动化/自我改进 |
-| **交互设计包** | 点名触发（推荐） | 前端设计三阶段：交互规格→实现→自审 |
-| **自研技能** | 自然语言触发 | 想法→PRD、模糊需求对齐 |
+| 🧭 产品 / 需求 | 自然语言 | 想法对齐、写 PRD |
+| 🎨 交互 / 视觉设计 | 点名触发（推荐） | 交互规格 → 实现 → 自审 → 动效 |
+| 🛠 开发落地 | CLI + 自然语言 | 规范先行、浏览器自测 |
+| 🔍 调研 / 信息 | `/firecrawl:<skill>`、自然语言 | 网页调研、深度报告、找技能 |
+| 🧠 通用沉淀 | 出错/被纠正后 | 沉淀经验 |

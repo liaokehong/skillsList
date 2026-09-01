@@ -17,19 +17,15 @@ foreach ($cmd in @("git", "node", "npm")) {
 }
 
 # ---------- 1. npm 全局工具 ----------
-Step "安装 npm 全局工具: OpenSpec + Task Master"
-npm install -g @fission-ai/openspec task-master-ai
-if ($LASTEXITCODE -eq 0) { Ok "openspec / task-master 已安装" } else { Warn "npm 全局安装失败，请手动执行: npm i -g @fission-ai/openspec task-master-ai" }
+Step "安装 npm 全局工具: OpenSpec"
+npm install -g @fission-ai/openspec
+if ($LASTEXITCODE -eq 0) { Ok "openspec 已安装" } else { Warn "失败，请手动执行: npm i -g @fission-ai/openspec" }
 
 # ---------- 2. skills.sh 生态技能（必须逐个安装，批量 -s 语法不生效） ----------
 Step "安装 skills.sh 生态技能 (npx skills add)"
 $skills = @(
-    # 基础四件套
+    # 交互 / 视觉设计角色
     "anthropics/skills@frontend-design",
-    "vercel-labs/skills@find-skills",
-    "vercel-labs/agent-browser@agent-browser",
-    "zhaono1/agent-playbook@self-improving-agent",
-    # 交互设计包
     "nextlevelbuilder/ui-ux-pro-max-skill@ui-ux-pro-max",
     "owl-listener/designer-skills@user-flow-diagram",
     "owl-listener/designer-skills@navigation-patterns",
@@ -38,9 +34,14 @@ $skills = @(
     "owl-listener/designer-skills@loading-states",
     "owl-listener/designer-skills@error-handling-ux",
     "owl-listener/designer-skills@heuristic-evaluation",
-    # 动效
     "emilkowalski/skills@improve-animations",
-    "emilkowalski/skills@animate"
+    "emilkowalski/skills@animate",
+    # 开发落地角色
+    "vercel-labs/agent-browser@agent-browser",
+    # 调研 / 信息角色
+    "vercel-labs/skills@find-skills",
+    # 通用沉淀
+    "zhaono1/agent-playbook@self-improving-agent"
 )
 $i = 0
 foreach ($s in $skills) {
@@ -50,17 +51,22 @@ foreach ($s in $skills) {
     if ($LASTEXITCODE -eq 0) { Ok $s } else { Warn "$s 安装失败" }
 }
 
-# ---------- 3. Claude 插件市场（有 claude CLI 才执行） ----------
-if (Get-Command claude -ErrorAction SilentlyContinue) {
-    Step "安装 Claude 插件: Superpowers / Remember"
-    claude plugin install superpowers@claude-plugins-official
-    claude plugin install remember@claude-plugins-official
-} else {
-    Step "未检测到 claude CLI，跳过 marketplace 插件"
-    Warn "Superpowers / Remember 请在编辑器插件面板搜索安装，或安装 claude CLI 后重跑本脚本"
+# ---------- 3. 自研技能（随仓库分发，拷贝到技能目录） ----------
+Step "安装自研技能: product-design / clarify-first"
+$dest = Join-Path $HOME ".agents\skills"
+New-Item -ItemType Directory -Force -Path $dest | Out-Null
+foreach ($name in @("product-design", "clarify-first")) {
+    $src = Join-Path $PSScriptRoot "skills\$name"
+    if (Test-Path $src) {
+        Copy-Item $src (Join-Path $dest $name) -Recurse -Force
+        Ok "$name -> ~/.agents/skills/$name"
+    } else {
+        Warn "仓库内找不到 skills/$name"
+    }
 }
 
-# Firecrawl：请用编辑器插件面板安装 firecrawl 插件，或参考 SKILLS_GUIDE.md 第 4 节
-# 自研技能 (product-design / clarify-first)：把 SKILL.md 目录拷到 ~/.agents/skills/ 即可
+# ---------- 4. Firecrawl（插件市场安装） ----------
+Step "Firecrawl"
+Warn "请用编辑器插件面板搜索安装 firecrawl 插件（详见 SKILLS_GUIDE.md 第四节）"
 
 Step "全部完成！重启编辑器后生效。完整说明见 SKILLS_GUIDE.md"
