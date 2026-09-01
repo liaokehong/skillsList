@@ -1,6 +1,20 @@
-# Claude Code Skills 使用指南
+# Claude Code Skills 个人使用清单
 
-本项目（ccswitch）已配置 7 类 Claude Code 技能/插件，全部项目可用（2026-08-28 逐项核查过安装状态）。
+> 我在用的 Claude Code / 编码智能体技能与插件清单：来源、安装、触发方式、使用示例。
+>
+> - 首次核验：2026-08-28 · 最近修订：2026-09-01
+> - 新设备一键安装与每日自动同步见 [README](./README.md)
+
+## 目录
+
+1. [Superpowers（综合开发能力）](#1-superpowers综合开发能力)
+2. [OpenSpec（规范驱动开发 / SDD）](#2-openspec规范驱动开发--sdd)
+3. [Remember（跨会话记忆）](#3-remember跨会话记忆)
+4. [Firecrawl（深度调研 / 网页爬取）](#4-firecrawl深度调研--网页爬取)
+5. [Task Master（需求管理 & 任务拆分）](#5-task-master需求管理--任务拆分)
+6. [基础技能四件套（skills.sh 生态）](#6-基础技能四件套skillssh-生态)
+7. [交互设计技能包（前端设计工作流）](#7-交互设计技能包前端设计工作流)
+8. [自研技能（个人沉淀）](#8-自研技能个人沉淀)
 
 ---
 
@@ -46,7 +60,7 @@
 
 ## 2. OpenSpec（规范驱动开发 / SDD）
 
-> **来源**: npm 全局包 `@fission-ai/openspec` v1.6.0
+> **来源**: npm 全局包 `@fission-ai/openspec`（本机 v1.10.0）
 > **仓库**: https://github.com/Fission-AI/OpenSpec
 
 AI 原生的规范驱动开发系统。先写规范（Spec），再驱动 AI 按规范实现代码。
@@ -80,10 +94,9 @@ openspec validate
 
 ---
 
-## 3. Remember（代码记忆 / 上下文记忆）
+## 3. Remember（跨会话记忆）
 
 > **来源**: `remember@claude-plugins-official` （marketplace）
-> **仓库**: https://github.com/Digital-Process-Tools/claude-remember
 
 连续记忆系统。自动提取、总结、压缩对话内容到分层日志中，让 Claude 记住之前做过的事情。
 
@@ -109,12 +122,12 @@ Remember 插件**自动在后台工作**，无需手动触发。每次对话结�
 
 ## 4. Firecrawl（深度调研 / 网页爬取）
 
-> **来源**: `firecrawl@claude-plugins-official` （marketplace）
 > **仓库**: https://github.com/firecrawl/firecrawl-claude-plugin.git
+> **规模**: 共 30+ 个 skill，以下为常用子集（2026-09-01 按实际安装核对）
 
 强大的网页抓取和爬取工具。将任意网站转为干净的 Markdown 或结构化数据，支持 AI agent 自主多源数据收集。
 
-### 包含的 Skill
+### 常用 Skill
 
 | Skill | 用途 |
 |-------|------|
@@ -123,9 +136,16 @@ Remember 插件**自动在后台工作**，无需手动触发。每次对话结�
 | `firecrawl-search` | 搜索网络 |
 | `firecrawl-map` | 网站结构映射 |
 | `firecrawl-download` | 下载页面内容 |
-| `firecrawl-instruct` | 结构化信息提取 |
+| `firecrawl-parse` | 文档/文件结构化解析 |
 | `firecrawl-agent` | AI agent 自主多源数据收集 |
-| `firecrawl-cli` | 命令行接口 |
+| `firecrawl-deep-research` | 多轮深度调研并输出报告 |
+| `firecrawl-research-papers` | 学术论文检索 |
+| `firecrawl-website-design-clone` | 网站设计风格克隆 |
+| `firecrawl-seo-audit` | SEO 审计 |
+| `firecrawl-qa` | 对抓取内容做问答 |
+| `firecrawl-monitor` | 网页变更监控 |
+
+> 早期版本的 `firecrawl-instruct` / `firecrawl-cli` 已分别被 `firecrawl-parse` 与独立 CLI 取代。
 
 ### 使用示例
 
@@ -144,7 +164,7 @@ Remember 插件**自动在后台工作**，无需手动触发。每次对话结�
 
 ## 5. Task Master（需求管理 & 任务拆分）
 
-> **来源**: npm 全局包 `task-master-ai` v0.43.1
+> **来源**: npm 全局包 `task-master-ai`（本机 v0.43.1）
 > **仓库**: https://github.com/eyaltoledano/claude-task-master
 
 AI 驱动的开发任务管理系统。将大需求拆分为可执行的小任务，跟踪进度，管理依赖。
@@ -201,7 +221,7 @@ task-master update <task-id> --status in-progress
 
 ## 6. 基础技能四件套（skills.sh 生态）
 
-> **来源**: skills.sh 注册表，`npx skills` CLI 安装（2026-08-28 装入 `~/.agents/skills/`）
+> **来源**: skills.sh 注册表，`npx skills` CLI 安装（装入 `~/.agents/skills/`）
 
 四个通用基础能力，均已核验落盘。
 
@@ -226,36 +246,31 @@ task-master update <task-id> --status in-progress
 刚才那个方案为什么不行，沉淀成经验
 ```
 
-> **安装/管理命令**（须逐个装，批量 `-s "a,b"` 语法不生效）：
-> `npx skills add anthropics/skills@frontend-design -g -y`
-> 更新：`npx skills update -g`
-
 ---
 
-## 7. 交互设计技能包（10 个，前端设计工作流）
+## 7. 交互设计技能包（前端设计工作流）
 
-> **来源**: skills.sh 生态（2026-08-28 装入 `~/.agents/skills/`，已核验）
-> 组成：`ui-ux-pro-max`（122K★）+ owl-listener/designer-skills 七核心 + emilkowalski/skills 两件
+> **来源**: skills.sh 生态（装入 `~/.agents/skills/`，已核验）
+> 组成：`ui-ux-pro-max` + owl-listener/designer-skills 七核心 + emilkowalski/skills 两件
 
 ### 包含的 Skill
 
 | Skill | 来源 | 用途 |
 |-------|------|------|
-| `ui-ux-pro-max` | nextlevelbuilder（122K★/333.6K 安装） | 全能"设计智能"：设计/评审/修复界面，组件选型、布局、无障碍、技术栈写法 |
+| `ui-ux-pro-max` | nextlevelbuilder | 全能"设计智能"：设计/评审/修复界面，组件选型、布局、无障碍、技术栈写法 |
 | `user-flow-diagram` | owl-listener | 画用户路径、决策点、分支逻辑 |
 | `navigation-patterns` | owl-listener | 选导航模式（tab/抽屉/层级/枢纽） |
 | `state-machine` | owl-listener | 穷举组件状态（空/加载/成功/失败…）——交互混乱的病根 |
 | `form-design` | owl-listener | 表单端到端设计：字段顺序、分组、校验 |
 | `loading-states` | owl-listener | 加载态设计 |
 | `error-handling-ux` | owl-listener | 错误的预防、检测、恢复路线 |
-| `feedback-patterns` | owl-listener | 操作反馈模式 |
 | `heuristic-evaluation` | owl-listener | 尼尔森十原则专家评审 + 严重度打分（交付前自审） |
-| `improve-animations` / `animate` | emilkowalski（33K★） | 动效审计与实现（可选，打磨手感） |
+| `improve-animations` / `animate` | emilkowalski | 动效审计与实现（可选，打磨手感） |
 
 ### 三阶段工作流（接力使用）
 
 ```
-PRD 定稿 ─► ①交互设计(owl-listener 六件) ─► ②写代码实现(ui-ux-pro-max) ─► ③交付前自审(heuristic-evaluation)
+PRD 定稿 ─► ①交互设计(owl-listener 七件) ─► ②写代码实现(ui-ux-pro-max) ─► ③交付前自审(heuristic-evaluation)
 ```
 
 **① 动手前想清楚**（产出《交互规格》文档，不是代码）：
@@ -282,15 +297,18 @@ PRD 定稿 ─► ①交互设计(owl-listener 六件) ─► ②写代码实现
 
 发现问题回 ① 补规格再改。动效稳定后可选跑 `improve-animations`。
 
-### 安装命令
+---
 
-```bash
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g -y -s ui-ux-pro-max
-# owl-listener 七件须逐个安装，例如：
-npx skills add owl-listener/designer-skills -g -y -s state-machine
-npx skills add owl-listener/designer-skills -g -y -s heuristic-evaluation
-npx skills add emilkowalski/skills -g -y -s improve-animations
-```
+## 8. 自研技能（个人沉淀）
+
+> **来源**: 自己编写，手工放入 `~/.agents/skills/`（没有上游仓库，注意随本仓库自行备份）
+
+| Skill | 用途 | 触发示例 |
+|-------|------|----------|
+| `product-design` | 把模糊的产品想法变成多角色可直接使用的 PRD（设计/开发/测试/管理分区） | "我想做一个…""把这个想法整理成需求""写个 PRD" |
+| `clarify-first` | 模糊需求开工前先对齐再执行：调研 → 澄清 → 产出《任务简报》 | 需求模糊、"优化一下"类任务开工前 |
+
+两者衔接：想法过于模糊时 `product-design` 会先走 `clarify-first` 对齐，再产出 PRD。
 
 ---
 
@@ -305,3 +323,4 @@ npx skills add emilkowalski/skills -g -y -s improve-animations
 | **Task Master** | CLI 或 MCP 自动 | 任务管理 |
 | **基础四件套** | 自然语言触发 | 视觉设计/找 skill/浏览器自动化/自我改进 |
 | **交互设计包** | 点名触发（推荐） | 前端设计三阶段：交互规格→实现→自审 |
+| **自研技能** | 自然语言触发 | 想法→PRD、模糊需求对齐 |
