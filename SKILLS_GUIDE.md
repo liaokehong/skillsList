@@ -3,7 +3,7 @@
 > 按「**角色 → 工作流**」组织。我的工作：企业内部数字化建设——需求与 PRD、交互与 UI 规范、内部工具（如部门提单系统）、算力服务器管理、AI 辅助开发。
 >
 > - 首次核验：2026-08-28 · 按角色重组：2026-09-01
-> - 新设备一键安装与每日自动同步见 [README](./README.md)
+> - 新设备使用：把本仓库地址发给 AI 编码助手即可自动安装，指令见 [AGENTS.md](./AGENTS.md)
 
 ## 角色总览
 
@@ -210,12 +210,14 @@ openspec validate  # 验证实现是否符合规范
 
 ## 安装速查
 
+**推荐方式**：把本仓库地址发给任何 AI 编码助手（"按 skillsList 安装技能清单"），助手会按 [AGENTS.md](./AGENTS.md) 指令自动完成下表全部步骤并汇报结果。
+
 | 类目 | 安装方式 |
 |------|----------|
-| skills.sh 生态（设计包 / 四件套 / 动效） | `npx skills add <repo>@<skill> -g -y`，须逐个装；一键脚本见 [README](./README.md) |
+| skills.sh 生态（设计包 / 动效 / agent-browser / find-skills / self-improving-agent） | `npx skills add <repo>@<skill> -g -y`，须逐个装 |
 | OpenSpec | `npm i -g @fission-ai/openspec` |
 | Firecrawl | 编辑器插件市场安装 firecrawl 插件 |
-| 自研技能（product-design / clarify-first） | 随本仓库 `skills/` 目录分发，install 脚本自动拷贝到 `~/.agents/skills/` |
+| 自研技能（product-design / clarify-first） | 随本仓库 `skills/` 目录分发，拷贝到 `~/.agents/skills/` |
 
 ## 快速参考表（按角色）
 
