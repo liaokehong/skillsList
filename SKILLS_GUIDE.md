@@ -2,7 +2,7 @@
 
 > 按「**角色 → 工作流**」组织。我的工作：企业内部数字化建设——需求与 PRD、交互与 UI 规范、内部工具（如部门提单系统）、算力服务器管理、AI 辅助开发。
 >
-> - 首次核验：2026-08-28 · 按角色重组：2026-09-01
+> - 首次核验：2026-08-28 · 按角色重组：2026-09-01 · **多客户端同步重构：2026-10-16**
 > - 新设备使用：把本仓库地址发给 AI 编码助手即可自动安装，指令见 [AGENTS.md](./AGENTS.md)
 
 ## 角色总览
@@ -19,6 +19,43 @@
 
 ---
 
+## 🔄 多 AI 客户端同步（核心规则）
+
+> **每个 skill 必须在所有已安装的 AI 客户端里都有副本。** 不存在"只装在某个客户端里"的 skill。
+
+### 为什么
+
+我的电脑上同时有 Cursor / ZCode / Codex / Claude（按需）。我在不同客户端之间切着用。每个客户端的 skills 目录不同：
+
+| 客户端 | skills 目录 |
+|---|---|
+| Cursor | `%USERPROFILE%\.cursor\skills\` |
+| ZCode | `%USERPROFILE%\.zcode\skills\` |
+| Codex | `%USERPROFILE%\.codex\skills\` |
+| Claude | `%USERPROFILE%\.claude\skills\` |
+
+具体路径在每台机器的 `state.local.json` 里（体检得到），**不能硬编码**。
+
+### 同步规则
+
+1. **自研 skill**（`skills/<name>/`）：从仓库 `skills/<name>/` 拷贝到每个已装客户端的 skills 目录。
+2. **远端 skill**（来自 skills.sh 生态）：先 `npx skills add <repo>@<skill> -g` 装到第一个客户端，再 copy 到其他已装客户端。
+3. **同步后必须验证**：每个目标目录的 `SKILL.md` 都存在且内容一致。
+4. **失败项跳过**：某个客户端目录不存在（如 Claude 没装）→ 跳过，汇总报告里写明"未同步：Claude 未安装"。
+
+### 体检时怎么查
+
+体检脚本 `scripts/health-check.ps1` 会对每个 skill 列出它在哪些客户端存在：
+
+```text
+clarify-first: Cursor✅ ZCode✅ Codex❌ Claude✅
+product-design: Cursor✅ ZCode✅ Codex❌ Claude✅
+```
+
+如果发现某个客户端缺了，状态报告会标 ❌，场景 1/2 会自动补齐。
+
+---
+
 ## 一、产品 / 需求角色
 
 ### 工作流
@@ -32,7 +69,7 @@
 模糊需求开工前先对齐再执行：调研 → 澄清 → 产出《任务简报》。
 
 - **触发**：需求缺少明确的"好"的标准、返工成本高时；创意/内容类任务（脚本、分镜、官网、工作台）、"优化一下"类口头需求
-- **文件**：随本仓库 `skills/clarify-first/` 分发，安装脚本自动落到 `~/.agents/skills/`
+- **文件**：随本仓库 `skills/clarify-first/` 分发，同步到所有已装客户端
 
 ### product-design（自研）
 
@@ -124,6 +161,8 @@ openspec validate  # 验证实现是否符合规范
 
 工作流：`init` → 编写规范（描述需求和验收标准）→ 让 AI 读规范并实现 → `validate` 校验。
 
+**装法**：`npm i -g @fission-ai/openspec`（全局工具，不复制到客户端 skills 目录——它注册在 PATH 里即可）。
+
 ### agent-browser（浏览器自动化）
 
 > **来源**: vercel-labs/agent-browser（738K 安装）
@@ -133,6 +172,8 @@ openspec validate  # 验证实现是否符合规范
 ```
 用 agent-browser 打开 localhost:3000，截图看下提单表单在手机尺寸下的效果
 ```
+
+**装法**：`npx skills add vercel-labs/agent-browser@agent-browser -g -y`（生成到 `~/.agents/skills/agent-browser/`，按多客户端同步规则再分发到各客户端 skills 目录）。
 
 ---
 
@@ -182,6 +223,8 @@ openspec validate  # 验证实现是否符合规范
 /firecrawl:firecrawl-crawl https://docs.example.com --maxPages 50
 ```
 
+**装法**：在 Cursor / ZCode 插件市场搜 "firecrawl" 安装（无法命令行）。装完后用同步规则分发到其他客户端。
+
 ### find-skills（发现新技能）
 
 > **来源**: vercel-labs/skills（3.1M 安装）
@@ -208,16 +251,18 @@ openspec validate  # 验证实现是否符合规范
 
 ---
 
-## 安装速查
+## 安装与同步速查
 
-**推荐方式**：把本仓库地址发给任何 AI 编码助手（"按 skillsList 安装技能清单"），助手会按 [AGENTS.md](./AGENTS.md) 指令自动完成下表全部步骤并汇报结果。
+**推荐方式**：把本仓库地址发给任何 AI 编码助手（"按 skillsList 配置这台电脑"），助手会按 [AGENTS.md](./AGENTS.md) 自动完成下表全部步骤并汇报。
 
-| 类目 | 安装方式 |
-|------|----------|
-| skills.sh 生态（设计包 / 动效 / agent-browser / find-skills / self-improving-agent） | `npx skills add <repo>@<skill> -g -y`，须逐个装 |
-| OpenSpec | `npm i -g @fission-ai/openspec` |
-| Firecrawl | 编辑器插件市场安装 firecrawl 插件 |
-| 自研技能（product-design / clarify-first） | 随本仓库 `skills/` 目录分发，拷贝到 `~/.agents/skills/` |
+| 类目 | 安装方式 | 是否分发到所有客户端 |
+|------|----------|----------|
+| skills.sh 生态（设计包 / 动效 / agent-browser / find-skills / self-improving-agent） | `npx skills add <repo>@<skill> -g -y`，逐个装 | ✅ 装到首个后分发到所有已装客户端 |
+| OpenSpec | `npm i -g @fission-ai/openspec` | ❌ 全局 CLI，不进 skills 目录 |
+| Firecrawl | 编辑器插件市场安装 firecrawl 插件 | ✅ 插件随编辑器走，跨客户端需各自装 |
+| 自研技能（product-design / clarify-first） | 随本仓库 `skills/` 目录分发 | ✅ 拷贝到所有已装客户端的 skills 目录 |
+
+**核心约束**：所有 skills 必须在所有已装客户端的 skills 目录中都有副本，并被体检脚本逐个验证。
 
 ## 快速参考表（按角色）
 
@@ -226,5 +271,5 @@ openspec validate  # 验证实现是否符合规范
 | 🧭 产品 / 需求 | 自然语言 | 想法对齐、写 PRD |
 | 🎨 交互 / 视觉设计 | 点名触发（推荐） | 交互规格 → 实现 → 自审 → 动效 |
 | 🛠 开发落地 | CLI + 自然语言 | 规范先行、浏览器自测 |
-| 🔍 调研 / 信息 | `/firecrawl:<skill>`、自然语言 | 网页调研、深度报告、找技能 |
+| 🔍 调研 / 信息 | `/firecrawl: `、自然语言 | 网页调研、深度报告、找技能 |
 | 🧠 通用沉淀 | 出错/被纠正后 | 沉淀经验 |

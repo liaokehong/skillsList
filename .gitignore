@@ -1,1 +1,11 @@
+# 本机状态文件（不进 Git）
+state.local.json
+state.changes.json
+state.diff.json
+
+# 体检临时输出
+*.health-check.tmp
+state.local.json.bak
+
+# 历史遗留
 sync.log

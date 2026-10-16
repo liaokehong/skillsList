@@ -1,0 +1,128 @@
+{
+  "$schema": "./state.template.schema.json",
+  "_comment": [
+    "This file is the inspection checklist template. It is committed to Git.",
+    "Each machine generates its own state.local.json from this template (NOT committed, see .gitignore).",
+    "Field definitions: see state.template.schema.json (optional).",
+    "Actual values are filled in by scripts/health-check.ps1.",
+    "Do NOT put any machine-specific data in this file: hostname, absolute paths, actual exe paths, actual version numbers are all forbidden.",
+    "Default value is null (unknown), NOT false (not satisfied). Only set true/false when confirmed by lookup."
+  ],
+  "generated_by": "scripts/health-check.ps1 v1.0",
+  "generated_at": null,
+  "machine_id": null,
+
+  "os": {
+    "name": null,
+    "version": null,
+    "arch": null
+  },
+
+  "disks": [
+    { "letter": null, "total_gb": null, "used_gb": null, "free_gb": null, "role": null }
+  ],
+
+  "base_toolkit": {
+    "git":    { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null },
+    "node":   { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null },
+    "npm":    { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null, "global_prefix": null },
+    "python": { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null },
+    "uv":     { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null, "python_install_dir": null, "tool_dir": null, "tool_bin_dir": null },
+    "docker": { "required": false, "installed": null, "version": null, "exe_path": null }
+  },
+
+  "ai_clients": {
+    "Cursor": { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
+    "ZCode":  { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
+    "Codex":  { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
+    "Claude": { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null }
+  },
+
+  "software": {
+    "lm_studio":   { "installed": null, "version": null, "exe_path": null, "model_dir": null, "required": false },
+    "ollama":      { "installed": null, "version": null, "exe_path": null, "model_dir": null, "required": false },
+    "pycharm":     { "installed": null, "version": null, "exe_path": null, "required": false },
+    "vscode":      { "installed": null, "version": null, "exe_path": null, "required": false },
+    "firecrawl_plugin": { "installed": null, "version": null, "required": false, "note": "must install via AI client marketplace" },
+    "ffmpeg":      { "installed": null, "version": null, "exe_path": null, "required": false },
+    "powertoys":   { "installed": null, "version": null, "exe_path": null, "required": false }
+  },
+
+  "paths": {
+    "software_root":   null,
+    "downloads_dir":   null,
+    "cache_root":      null,
+    "models_root":     null,
+    "bin_dir":         null,
+    "follows_convention": null,
+    "_convention": "D:\\001_Software\\<name>\\ + D:\\001_Software\\_caches\\ + D:\\001_Software\\_models\\ + D:\\001_Software\\bin\\"
+  },
+
+  "env_vars": {
+    "UV_CACHE_DIR":          { "expected": "_caches\\uv\\cache",        "actual": null, "ok": null },
+    "UV_PYTHON_INSTALL_DIR": { "expected": "_caches\\uv\\python",       "actual": null, "ok": null },
+    "UV_TOOL_DIR":           { "expected": "_caches\\uv\\tools",        "actual": null, "ok": null },
+    "UV_TOOL_BIN_DIR":       { "expected": "bin",                       "actual": null, "ok": null },
+    "PIP_CACHE_DIR":         { "expected": "_caches\\pip",              "actual": null, "ok": null },
+    "npm_config_cache":      { "expected": "_caches\\npm-cache",        "actual": null, "ok": null },
+    "npm_config_prefix":     { "expected": "npm-global",                "actual": null, "ok": null },
+    "CARGO_HOME":            { "expected": "_caches\\cargo",            "actual": null, "ok": null },
+    "RUSTUP_HOME":           { "expected": "_caches\\rustup",           "actual": null, "ok": null },
+    "GOPATH":                { "expected": "_caches\\go",               "actual": null, "ok": null },
+    "GOMODCACHE":            { "expected": "_caches\\go\\pkg\\mod",     "actual": null, "ok": null },
+    "GRADLE_USER_HOME":      { "expected": "_caches\\gradle",           "actual": null, "ok": null },
+    "HF_HOME":               { "expected": "_models\\huggingface",      "actual": null, "ok": null },
+    "MODELSCOPE_CACHE":      { "expected": "_models\\modelscope",       "actual": null, "ok": null },
+    "TORCH_HOME":            { "expected": "_models\\torch",            "actual": null, "ok": null },
+    "OLLAMA_MODELS":         { "expected": "_models\\ollama",           "actual": null, "ok": null }
+  },
+
+  "skills": {
+    "self_skills": {
+      "clarify-first":  { "source": "skills/clarify-first",  "synced_to": [] },
+      "product-design": { "source": "skills/product-design", "synced_to": [] }
+    },
+    "remote_skills": {
+      "frontend-design":       { "source": "anthropics/skills@frontend-design",        "synced_to": [] },
+      "ui-ux-pro-max":         { "source": "nextlevelbuilder/ui-ux-pro-max-skill@ui-ux-pro-max", "synced_to": [] },
+      "user-flow-diagram":     { "source": "owl-listener/designer-skills@user-flow-diagram", "synced_to": [] },
+      "navigation-patterns":   { "source": "owl-listener/designer-skills@navigation-patterns", "synced_to": [] },
+      "state-machine":         { "source": "owl-listener/designer-skills@state-machine", "synced_to": [] },
+      "form-design":           { "source": "owl-listener/designer-skills@form-design", "synced_to": [] },
+      "loading-states":        { "source": "owl-listener/designer-skills@loading-states", "synced_to": [] },
+      "error-handling-ux":     { "source": "owl-listener/designer-skills@error-handling-ux", "synced_to": [] },
+      "heuristic-evaluation":  { "source": "owl-listener/designer-skills@heuristic-evaluation", "synced_to": [] },
+      "improve-animations":    { "source": "emilkowalski/skills@improve-animations", "synced_to": [] },
+      "animate":               { "source": "emilkowalski/skills@animate", "synced_to": [] },
+      "agent-browser":         { "source": "vercel-labs/agent-browser@agent-browser", "synced_to": [] },
+      "find-skills":           { "source": "vercel-labs/skills@find-skills", "synced_to": [] },
+      "self-improving-agent":  { "source": "zhaono1/agent-playbook@self-improving-agent", "synced_to": [] }
+    }
+  },
+
+  "global_tools": {
+    "openspec": { "installed": null, "version": null, "source": "npm i -g @fission-ai/openspec", "exe_path": null }
+  },
+
+  "network": {
+    "github_accessible": null,
+    "npm_registry_accessible": null,
+    "mirror_configured": null,
+    "mirrors": {
+      "pip": null,
+      "npm": null,
+      "huggingface": null
+    }
+  },
+
+  "repo": {
+    "local_clone_path": null,
+    "branch": null,
+    "ahead_of_origin": null,
+    "behind_of_origin": null,
+    "clean": null
+  },
+
+  "issues": [],
+  "_issues_comment": "Inspection issues, 4 severity levels: missing (required missing) / path (path does not follow convention) / env (env var not redirected) / risk (high risk: C drive bloat, system dir modification)"
+}
