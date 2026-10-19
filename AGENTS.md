@@ -8,11 +8,11 @@
 
 ## 🤖 AI 助手请先读这段
 
-当用户**用任何方式提到本仓库**（"按 skillsList 装一下"、"按 skillsList 同步"、"按 skillsList 体检"、"按 skillsList 配置这台电脑"）时，**按下文 5 个场景执行，不要反复问用户"你要干什么"**。遇到失败项跳过，最后汇总。
+当用户**用任何方式提到本仓库**（"按 skillsList 装一下"、"按 skillsList 同步"、"按 skillsList 体检"、"按 skillsList 配置这台电脑"）时，**按下文 5 个场景执行，不要反复问用户"你要干什么"**。新电脑从 GitHub 地址开始，先取得仓库并读取本文件，再体检本机。遇到失败项跳过，最后汇总。
 
 ⚠️ **常见误判纠正**：
-- 本仓库**不是技能包**——`skills/` 目录里只有 2 个自研技能，其余 13 个技能（设计、动效、agent-browser、find-skills、self-improving-agent 等）需从远程注册表（skills.sh / npm）安装。
-- 本仓库**不是安装脚本**——所有执行由 AI 客户端内的助手按场景描述主动完成，不需要运行 `install.sh` / `setup.ps1`。
+- 本仓库**不是技能包**——`skills/` 目录里只有 2 个自研技能，其余 14 个技能（设计、动效、agent-browser、find-skills、self-improving-agent 等）需从远程注册表（skills.sh / npm）安装。
+- 本仓库**不含任何脚本**——体检、安装、同步全部由 AI 客户端内的助手读取本文件和 `state.template.json` 后，按本机实际情况自行设计步骤完成；不存在 `install.sh` / `setup.ps1` / `health-check.ps1` 之类的固定入口。
 - 本仓库**不是单机器配置**——所有机器共用本仓库，但每台机器的路径、已装软件、缓存目录都是各自体检得到的，不能硬编码到模板里。
 
 ---
@@ -35,12 +35,15 @@
 
 **用户说"按 skillsList 体检"或"配置这台新电脑"** → AI 执行：
 
-1. **拉取最新仓库**：
-   - 本机已克隆 → `git pull --ff-only`
-   - 未克隆 → `git clone https://github.com/liaokehong/skillsList.git D:\001_Software\skillsList`
-2. **执行只读体检脚本**：
-   - 优先执行 `D:\001_Software\skillsList\scripts\health-check.ps1`（与仓库同发）
-   - 也可 AI 自己读 `state.template.json` 字段，用 OS 命令逐项查
+1. **取得并读取仓库**：
+   - 用户只提供 GitHub 地址时，AI 先判断本机是否已有该仓库；已有则读取本地规则，必要时 `git pull --ff-only`。
+   - 未克隆且 Git 可用时，AI 选择本机软件根目录下的 `skillsList` 目录进行克隆；软件根目录不存在时，先根据磁盘体检结果选择可用数据盘并创建它。
+   - Git 不可用时，AI 使用客户端可用的网络和系统工具取得 Git，安装包放入下载暂存目录，Git 本体放入软件根目录，再继续克隆。不能假定仓库已经存在，也不能把当前电脑路径写入模板。
+   - 克隆完成后必须重新读取仓库内的 `README.md`、`AGENTS.md`、`SKILLS_GUIDE.md` 和 `state.template.json`，后续步骤以当前仓库版本为准。
+2. **执行只读体检（AI 自主设计步骤，无脚本）**：
+   - 读 `state.template.json`，按字段清单逐项检查：系统、磁盘、基础套件、AI 客户端、业务软件、路径、环境变量、网络、仓库、技能同步
+   - 检查命令由 AI 根据本机情况选择（Windows 用 `where` / `Get-Command` / `Get-PSDrive` / 注册表查询，macOS/Linux 用 `which` / `df` 等）；查不到的项填 `null`，不推测、不标 `false`
+   - 环境变量以模板 `env_vars` 表为准：`expected` 是相对软件根目录的约定路径，`actual` 从用户级环境变量读取后拼接比较
 3. **生成 `state.local.json`**（路径：`D:\001_Software\skillsList\state.local.json`）：
    - 复制 `state.template.json` 为骨架
    - 用体检结果填充所有字段
@@ -55,7 +58,7 @@
    - "是否按此报告进入场景 1（安装）？"
    - "是否需要我先把修改建议写到一份 `state.changes.json` 里供你审？"
 
-**红线**：场景 0 不执行任何写操作（不装软件、不改注册表、不删文件）。唯一写入就是 `state.local.json`（在 `.gitignore` 里，不提交）。
+**红线**：场景 0 不执行安装、注册表修改、环境变量修改和删除。允许的写入只有本机 `state.local.json`；拉取仓库或创建本地克隆目录属于启动必要动作。所有实际安装和配置必须等用户确认进入场景 1。
 
 ---
 
@@ -65,9 +68,9 @@
 
 1. **必须有 `state.local.json`**：若不存在，先自动跑场景 0 生成。
 2. **对照 `state.template.json` 字段 + `state.local.json` 当前值，列出待办**：
-   - 基础开发套件（git/node/npm/python/uv）缺失 → 装
+   - 基础开发套件（Git/Node.js/npm/Python/uv/Windows Terminal）缺失 → 装
    - AI 客户端缺失 → 提示用户在编辑器市场装（不自动装）
-   - 缓存/模型环境变量未设 → 跑 `localConfig/scripts/redirect-caches-to-d.ps1`
+   - 缓存/模型环境变量未设 → 按 `state.template.json` 的 `env_vars` 表逐个设置为用户级变量（目标 = 本机软件根目录 + `expected` 相对路径），需要时追加 PATH；注册表 / PATH 修改先列影响给用户确认
    - skills 未同步到任何客户端 → 按"技能同步到所有客户端"规则装
 3. **逐项确认高风险动作**（必须列出来用户确认）：
    - 装在 C 盘的工具要移 D 盘
@@ -76,19 +79,23 @@
 4. **执行**：每项执行前输出"将要做 X / 影响 Y / 落点 Z"。
 5. **完成后跑场景 0 复检**，对比 `state.local.json` 变化，汇报。
 
-**技能同步到所有客户端的规则**（本仓库新增核心能力）：
+**技能同步规则**（核心能力：所有客户端完全一致）：
+
+**硬规则**：清单里的每个 skill 必须在**每个已安装客户端**的 skills 目录里都存在，且 `SKILL.md` 内容一致——不存在"只装在某个客户端"的 skill。客户端自有的、不在清单里的技能（平台专属）不受影响，也不要求删除。
 
 ```
-对仓库里每个 skill：
-  for client in state.local.json.ai_clients where client.installed:
-    target = client.skills_path
-    copy skill source to target
-    verify SKILL.md exists at target
+对 state.template.json.skills 里每个 skill：
+  1. 检查：是否已存在于各客户端 skills 目录（对照 SKILL.md 内容）
+  2. 缺失 → 安装：远端 `npx skills add <repo>@<skill> -g -y`；自研从仓库 skills/<name>/ 拷贝
+  3. 分发：for client in state.local.json.ai_clients where client.installed and client.skills_path is known:
+       copy 到 client.skills_path（已存在且内容一致则跳过）
+  4. 验证：每个目标目录的 SKILL.md 存在且内容一致
 ```
 
-- **不**直接 copy 到一个默认路径
-- **必须**先读 `state.local.json` 拿每个客户端的 skills_path
-- **必须**逐个验证 SKILL.md 落地
+- **不**直接 copy 到一个默认路径——必须先读 `state.local.json` 拿每个客户端的 skills_path
+- **首次使用**（场景 1）：全量检查 → 缺的装 → 分发 → 逐个验证
+- **日常使用**（场景 2 / 每日定时）：diff 驱动——只补新增和变更项，已一致的不动
+- **失败项跳过**：某客户端未装 → 跳过，汇总里写明
 
 **技能源**：
 - 自研：`skills/<name>/` 来自本仓库
@@ -102,7 +109,7 @@
 **用户说"按 skillsList 同步"** → AI 执行：
 
 1. `cd D:\001_Software\skillsList && git pull --ff-only`
-2. 重新执行 `scripts/health-check.ps1` 生成新的 `state.local.json`
+2. 按场景 0 的无脚本方式重新体检，刷新 `state.local.json`
 3. 对比新旧两份 `state.local.json`，列出 diff：
    - 新增项
    - 删除项
@@ -146,7 +153,7 @@
 7. 用户确认后执行 `git push`。
 
 **红线（上传）**：
-- 不写用户的工号、公司邮箱、绝对路径到任何提交文件
+- 任何对外内容都严格禁止出现所属组织名称、部门、内部系统、项目代号、内部域名、账号、工号、办公地点或可反推组织身份的术语；不确定时使用通用占位符或删除。
 - 自研技能的 `SKILL.md` 不得含机器特定路径
 - `state.template.json` 不得含任何本机数据
 - commit 身份用仓库级 `git config user.name` / `user.email`
@@ -155,7 +162,7 @@
 
 ## 体检规则（场景 0 的标准）
 
-体检脚本 `scripts/health-check.ps1` 是只读的标准实现，AI 助手可参考或直接执行。体检项：
+体检由 AI 助手直接执行（本仓库不含脚本）：读 `state.template.json` 字段，按本机情况设计检查命令。体检项：
 
 | 大类 | 必查项 |
 |---|---|
@@ -182,3 +189,4 @@
 - **不擅自修改注册表**：改 PATH / 改系统环境变量必须先列影响
 - **不在场景 0 写任何文件**：除了 `state.local.json` 自身
 - **AI 客户端路径不写死**：必须从体检得到，每个客户端的 skills_path 各异
+- **软件根目录不写死**：模板只保存规则，实际根目录由本机体检确定

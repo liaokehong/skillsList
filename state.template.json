@@ -4,11 +4,11 @@
     "This file is the inspection checklist template. It is committed to Git.",
     "Each machine generates its own state.local.json from this template (NOT committed, see .gitignore).",
     "Field definitions: see state.template.schema.json (optional).",
-    "Actual values are filled in by scripts/health-check.ps1.",
+    "Actual values are filled in by the AI assistant (AGENTS.md scenario 0): read this template, inspect each field with OS commands designed for the local machine. No script involved.",
     "Do NOT put any machine-specific data in this file: hostname, absolute paths, actual exe paths, actual version numbers are all forbidden.",
     "Default value is null (unknown), NOT false (not satisfied). Only set true/false when confirmed by lookup."
   ],
-  "generated_by": "scripts/health-check.ps1 v1.0",
+  "generated_by": "AI assistant per AGENTS.md scenario 0",
   "generated_at": null,
   "machine_id": null,
 
@@ -28,7 +28,8 @@
     "npm":    { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null, "global_prefix": null },
     "python": { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null },
     "uv":     { "required": true,  "installed": null, "version": null, "exe_path": null, "cache_dir": null, "python_install_dir": null, "tool_dir": null, "tool_bin_dir": null },
-    "docker": { "required": false, "installed": null, "version": null, "exe_path": null }
+    "docker": { "required": false, "installed": null, "version": null, "exe_path": null },
+    "windows_terminal": { "required": true, "installed": null, "version": null, "exe_path": null }
   },
 
   "ai_clients": {
@@ -54,7 +55,7 @@
     "models_root":     null,
     "bin_dir":         null,
     "follows_convention": null,
-    "_convention": "D:\\001_Software\\<name>\\ + D:\\001_Software\\_caches\\ + D:\\001_Software\\_models\\ + D:\\001_Software\\bin\\"
+    "_convention": "<software_root>\\<name>\\ + <software_root>\\_caches\\ + <software_root>\\_models\\ + <software_root>\\bin\\"
   },
 
   "env_vars": {
@@ -77,6 +78,7 @@
   },
 
   "skills": {
+    "_sync_rule": "Every skill in this list must exist in EVERY installed AI client's skills_path with identical SKILL.md content. First run: full check + install missing. Daily: diff-driven, only add/update changed items.",
     "self_skills": {
       "clarify-first":  { "source": "skills/clarify-first",  "synced_to": [] },
       "product-design": { "source": "skills/product-design", "synced_to": [] }

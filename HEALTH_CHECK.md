@@ -1,6 +1,8 @@
 # Health Check（体检流程）
 
 > skillsList 仓库把"新电脑从零开始"做成可重复的标准化流程。本文档解释体检是什么、查什么、输出什么、怎么用。
+>
+> **本仓库不含任何脚本。** 体检由 AI 助手读取 `state.template.json` 的字段清单，按本机实际情况自行设计检查步骤完成。
 
 ## 一、体检的目的
 
@@ -15,24 +17,19 @@
 
 体检**只读**：不改注册表、不删文件、不装软件。
 
-## 二、调用方式
+## 二、执行方式（AI 自主，无脚本）
 
-### 方式 A：执行仓库脚本
+AI 助手读 `state.template.json`，逐字段用本机命令检查，示例命令按平台自选：
 
-```bash
-powershell -ExecutionPolicy Bypass -File scripts/health-check.ps1
-```
+| 平台 | 工具/版本 | 磁盘 | 用户级环境变量 |
+|---|---|---|---|
+| Windows | `where` / `Get-Command` / `(Get-Item).VersionInfo` | `Get-PSDrive` | `[Environment]::GetEnvironmentVariable(name, 'User')` |
+| macOS / Linux | `which` / `<tool> --version` | `df -h` | `printenv` / `~/.zshrc` 等 |
 
-默认输出：`state.local.json`（与 `state.template.json` 同目录）。
+**最终产物必须是 `state.local.json`**（与模板同目录，`.gitignore` 已排除），字段结构对齐 `state.template.json`：
 
-可选参数：
-
-- `-OutputPath <path>`：自定义输出位置
-- `-TemplatePath <path>`：自定义模板位置
-
-### 方式 B：AI 自行体检
-
-AI 助手可以**不跑脚本**，自己用 OS 命令逐项查。但**最终产物必须是 `state.local.json`**，且字段结构对齐 `state.template.json`。
+- 只填查到的真实值；查不到填 `null`，不推测
+- 找不到 ≠ 不存在——只有明确确认"没有"才填 `false`
 
 ## 三、体检项
 
@@ -42,14 +39,14 @@ AI 助手可以**不跑脚本**，自己用 OS 命令逐项查。但**最终产�
 |---|---|---|
 | 系统 | OS / 版本 / 架构 | Windows / macOS / Linux 都查 |
 | 磁盘 | 各盘 total/used/free，标 system vs data | C 盘是系统盘，D 盘起为数据盘 |
-| 基础开发套件 | git / node / npm / python / uv / docker | 必装 vs 按需装 |
+| 基础开发套件 | git / node / npm / python / uv / docker / Windows Terminal | 必装 vs 按需装 |
 | AI 客户端 | Cursor / ZCode / Codex | 各自版本 + skills 目录 |
 | 业务软件 | LM Studio / Ollama / PyCharm / VSCode / Firecrawl / FFmpeg / PowerToys | 大多按需 |
 | 路径 | 软件根 / 下载 / 缓存 / 模型 / bin | 是否落在约定目录 |
 | 环境变量 | 16 个缓存/模型变量 | 是否重定向到约定目标 |
 | 网络 | GitHub / npm 可达性，镜像设置 | 装之前必查 |
 | 仓库 | 本地克隆路径 / 分支 / 同步状态 | 同步的依赖 |
-| skills 同步 | 每个 skill 在哪些客户端存在 | 核心规则 |
+| skills 同步 | 每个 skill 在哪些客户端存在 | 核心规则：所有客户端完全一致 |
 
 ### 字段值约定
 
@@ -58,8 +55,6 @@ AI 助手可以**不跑脚本**，自己用 OS 命令逐项查。但**最终产�
 | `true` | 明确查到存在 |
 | `false` | 明确查到不存在 |
 | `null` | 未知（查不到，不推测） |
-
-体检脚本不会"如果找不到就标 false"——会标 null，让 AI 后续决策时知道"这是没查到的"。
 
 ## 四、state.local.json 字段说明
 
@@ -103,7 +98,7 @@ AI 助手可以**不跑脚本**，自己用 OS 命令逐项查。但**最终产�
 
 ```text
 用户: 按 skillsList 体检
-AI:  (执行 health-check.ps1)  → state.local.json
+AI:  （按 state.template.json 逐项体检，AI 自选本机命令）→ state.local.json
 AI:  已生成报告
      ✅ 已满足：git 2.37.1, Cursor 3.24.9, ...
      ❌ 缺失：node, npm, python, uv
@@ -116,10 +111,10 @@ AI:  已生成报告
 ```text
 用户: 确认安装
 AI:  (基于 state.local.json 列出待办)
-     1. 装 node / npm / python / uv → 落 D 盘
-     2. 设 2 个未设的环境变量
+     1. 装 node / npm / python / uv → 落数据盘
+     2. 按 env_vars 表设置未设的环境变量
      3. 同步自研 skills 到 Cursor / ZCode / Codex
-     4. 装 13 个远端 skills
+     4. 装 14 个远端 skills
      高风险项：需新建 _caches/cargo 和 _caches/rustup
      是否继续？
 用户: 继续
@@ -127,7 +122,7 @@ AI:  (执行，每步输出影响)  → 完成
 AI:  (重跑体检)  → 新 state.local.json
 AI:  本轮新增/失败/跳过的清单：
      ✅ node 22.11.0 装好
-     ✅ skills 同步到 3/4 客户端（Claude 未装）
+     ✅ skills 同步到 3/3 客户端
      ⚠️ openspec 未装（不在本次范围）
 ```
 
@@ -135,7 +130,7 @@ AI:  本轮新增/失败/跳过的清单：
 
 ```text
 用户: 按 skillsList 同步
-AI:  (git pull, 重跑体检, 对比新旧 state.local.json)
+AI:  (git pull, 重体检, 对比新旧 state.local.json)
      Diff 摘要：
      - 新增项：find-skills 在仓库中标记为推荐
      - 变化项：product-design 版本从 1.0 → 1.1
@@ -145,10 +140,8 @@ AI:  (git pull, 重跑体检, 对比新旧 state.local.json)
 
 ## 七、扩展性
 
-体检脚本接受 `-OutputPath` 和 `-TemplatePath` 参数，可以：
+默认行为就是"读 `state.template.json`，写 `state.local.json`"——保持简单。
 
-- 用同一模板给多台机器做体检（CI 场景）
-- 在不同目录跑体检（用户偏好）
-- 把模板复制成自定义版本（项目特例）
-
-但**默认行为**就是"读 `state.template.json`，写 `state.local.json`"——保持简单。
+- **多机器**：同一模板适用于任何机器；AI 按平台（Windows / macOS / Linux）自行选择检查命令，模板不含任何机器特定数据
+- **自定义检查范围**：AI 可按用户要求只查部分字段（如只查技能同步），产物仍是同结构的 `state.local.json`
+- **不引入脚本**：如果发现自己在重复某套固定命令，应把规则沉淀进模板/文档（场景 4），而不是写脚本
