@@ -1,6 +1,6 @@
 # Health Check（体检流程）
 
-> skillsList 仓库把"新电脑从零开始"做成可重复的标准化流程。本文档解释体检是什么、查什么、输出什么、怎么用。
+> env-manifest 仓库把"新电脑从零开始"做成可重复的标准化流程。本文档解释体检是什么、查什么、输出什么、怎么用。
 >
 > **本仓库不含任何脚本。** 体检由 AI 助手读取 `state.template.json` 的字段清单，按本机实际情况自行设计检查步骤完成。
 
@@ -97,7 +97,7 @@ AI 助手读 `state.template.json`，逐字段用本机命令检查，示例命�
 ### 场景 0（首次体检）
 
 ```text
-用户: 按 skillsList 体检
+用户: 按 env-manifest 体检
 AI:  （按 state.template.json 逐项体检，AI 自选本机命令）→ state.local.json
 AI:  已生成报告
      ✅ 已满足：git 2.37.1, Cursor 3.24.9, ...
@@ -129,7 +129,7 @@ AI:  本轮新增/失败/跳过的清单：
 ### 场景 2（同步）
 
 ```text
-用户: 按 skillsList 同步
+用户: 按 env-manifest 同步
 AI:  (git pull, 重体检, 对比新旧 state.local.json)
      Diff 摘要：
      - 新增项：find-skills 在仓库中标记为推荐

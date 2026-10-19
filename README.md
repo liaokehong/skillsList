@@ -1,4 +1,4 @@
-# skillsList
+# env-manifest
 
 > **个人开发环境与 AI 技能清单**。规则统一，机器状态各自不同——所有机器共用本仓库，每台机器的本地状态在 `state.local.json`（不进 Git）。
 >
@@ -10,11 +10,11 @@
 
 | 场景 | 触发口令 | 状态 |
 |---|---|---|
-| 0 体检 | "按 skillsList 体检" / "配置这台新电脑" | 只读 |
-| 1 安装 | "按 skillsList 安装" | 写入 |
-| 2 同步 | "按 skillsList 同步" | 写入 |
-| 3 定时 | "每天同步 skillsList" | 注册 |
-| 4 上传 | "把新技能收录进 skillsList" | 写仓库 |
+| 0 体检 | "按 env-manifest 体检" / "配置这台新电脑" | 只读 |
+| 1 安装 | "按 env-manifest 安装" | 写入 |
+| 2 同步 | "按 env-manifest 同步" | 写入 |
+| 3 定时 | "每天同步 env-manifest" | 注册 |
+| 4 上传 | "把新技能收录进 env-manifest" | 写仓库 |
 
 ⚠️ 本仓库是**清单 + 检查模板**，不含任何脚本——体检、安装、同步由 AI 读 [AGENTS.md](./AGENTS.md) 和 `state.template.json` 按本机情况自行设计步骤执行。`skills/` 目录只有 2 个自研技能，其余 14 个技能需要从远程注册表（skills.sh / npm）安装。
 
@@ -23,31 +23,31 @@
 把下面的话发给你的 AI 编码助手（ZCode / Cursor / Codex 等）：
 
 ```text
-帮我按照 https://github.com/liaokehong/skillsList 配置这台电脑（先体检再装）
+帮我按照 https://github.com/liaokehong/env-manifest 配置这台电脑（先体检再装）
 ```
 
-新电脑没有本地仓库时，AI 客户端先使用自身可用的网络和系统工具取得 Git，再把仓库克隆到本机合适的软件目录。不能假定 `D:\001_Software\skillsList` 已经存在；实际路径由体检结果确定，并写入本机 `state.local.json`。
+新电脑没有本地仓库时，AI 客户端先使用自身可用的网络和系统工具取得 Git，再把仓库克隆到本机合适的软件目录。不能假定 `D:\001_Software\env-manifest` 已经存在；实际路径由体检结果确定，并写入本机 `state.local.json`。
 
 ```text
-按 skillsList 体检并输出配置方案，暂不执行
-```
-
-```text
-按 skillsList 同步并检查这台电脑
+按 env-manifest 体检并输出配置方案，暂不执行
 ```
 
 ```text
-每天早上 9 点帮我同步 skillsList
+按 env-manifest 同步并检查这台电脑
 ```
 
 ```text
-把 XXX 技能收录进 skillsList
+每天早上 9 点帮我同步 env-manifest
+```
+
+```text
+把 XXX 技能收录进 env-manifest
 ```
 
 ## 仓库结构
 
 ```
-skillsList/
+env-manifest/
 ├── AGENTS.md                 ← AI 执行指令（5 场景）
 ├── README.md                 ← 本文件：入口 + 人类口令
 ├── SKILLS_GUIDE.md           ← 完整技能清单（按角色 → 工作流）

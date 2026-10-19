@@ -1,4 +1,4 @@
-# AGENTS.md — skillsList 仓库 · Agent 执行指令
+# AGENTS.md — env-manifest 仓库 · Agent 执行指令
 
 > **本仓库是一份「个人开发环境与 AI 技能清单」。** 它不只管 AI 技能，还管基础开发环境、本机配置适配、多 AI 客户端的同步。仓库内统一的规则 + 每台电脑各自的 `state.local.json` = 完整方案。
 
@@ -8,7 +8,7 @@
 
 ## 🤖 AI 助手请先读这段
 
-当用户**用任何方式提到本仓库**（"按 skillsList 装一下"、"按 skillsList 同步"、"按 skillsList 体检"、"按 skillsList 配置这台电脑"）时，**按下文 5 个场景执行，不要反复问用户"你要干什么"**。新电脑从 GitHub 地址开始，先取得仓库并读取本文件，再体检本机。遇到失败项跳过，最后汇总。
+当用户**用任何方式提到本仓库**（"按 env-manifest 装一下"、"按 env-manifest 同步"、"按 env-manifest 体检"、"按 env-manifest 配置这台电脑"）时，**按下文 5 个场景执行，不要反复问用户"你要干什么"**。新电脑从 GitHub 地址开始，先取得仓库并读取本文件，再体检本机。遇到失败项跳过，最后汇总。
 
 ⚠️ **常见误判纠正**：
 - 本仓库**不是技能包**——`skills/` 目录里只有 2 个自研技能，其余 14 个技能（设计、动效、agent-browser、find-skills、self-improving-agent 等）需从远程注册表（skills.sh / npm）安装。
@@ -21,11 +21,11 @@
 
 | 场景 | 触发口令 | 状态 | 副作用 |
 |---|---|---|---|
-| **0 体检** | "按 skillsList 体检" / "先体检" / "配置这台新电脑" | 只读 | 写 `state.local.json`（不进 Git） |
-| **1 安装** | "按 skillsList 安装" / "确认安装" | 写入 | 装软件、装技能、装环境 |
-| **2 同步** | "按 skillsList 同步" / "更新技能" | 写入 | 更新已装项 |
-| **3 定时** | "每天同步 skillsList" | 注册 | 用 AI 自身定时能力（不建 shell 计划任务） |
-| **4 上传** | "把新技能收录进 skillsList" / "更新清单" | 写仓库 | git add / commit / push（不直接 push，先给用户审） |
+| **0 体检** | "按 env-manifest 体检" / "先体检" / "配置这台新电脑" | 只读 | 写 `state.local.json`（不进 Git） |
+| **1 安装** | "按 env-manifest 安装" / "确认安装" | 写入 | 装软件、装技能、装环境 |
+| **2 同步** | "按 env-manifest 同步" / "更新技能" | 写入 | 更新已装项 |
+| **3 定时** | "每天同步 env-manifest" | 注册 | 用 AI 自身定时能力（不建 shell 计划任务） |
+| **4 上传** | "把新技能收录进 env-manifest" / "更新清单" | 写仓库 | git add / commit / push（不直接 push，先给用户审） |
 
 执行前先确认当前处于哪个场景——按口令的关键词判定。同一句话可能命中多个场景，按优先级：体检 > 安装 > 同步 > 定时 > 上传。
 
@@ -33,18 +33,18 @@
 
 ## 场景 0：体检（只读，生成 state.local.json）
 
-**用户说"按 skillsList 体检"或"配置这台新电脑"** → AI 执行：
+**用户说"按 env-manifest 体检"或"配置这台新电脑"** → AI 执行：
 
 1. **取得并读取仓库**：
    - 用户只提供 GitHub 地址时，AI 先判断本机是否已有该仓库；已有则读取本地规则，必要时 `git pull --ff-only`。
-   - 未克隆且 Git 可用时，AI 选择本机软件根目录下的 `skillsList` 目录进行克隆；软件根目录不存在时，先根据磁盘体检结果选择可用数据盘并创建它。
+   - 未克隆且 Git 可用时，AI 选择本机软件根目录下的 `env-manifest` 目录进行克隆；软件根目录不存在时，先根据磁盘体检结果选择可用数据盘并创建它。
    - Git 不可用时，AI 使用客户端可用的网络和系统工具取得 Git，安装包放入下载暂存目录，Git 本体放入软件根目录，再继续克隆。不能假定仓库已经存在，也不能把当前电脑路径写入模板。
    - 克隆完成后必须重新读取仓库内的 `README.md`、`AGENTS.md`、`SKILLS_GUIDE.md` 和 `state.template.json`，后续步骤以当前仓库版本为准。
 2. **执行只读体检（AI 自主设计步骤，无脚本）**：
    - 读 `state.template.json`，按字段清单逐项检查：系统、磁盘、基础套件、AI 客户端、业务软件、路径、环境变量、网络、仓库、技能同步
    - 检查命令由 AI 根据本机情况选择（Windows 用 `where` / `Get-Command` / `Get-PSDrive` / 注册表查询，macOS/Linux 用 `which` / `df` 等）；查不到的项填 `null`，不推测、不标 `false`
    - 环境变量以模板 `env_vars` 表为准：`expected` 是相对软件根目录的约定路径，`actual` 从用户级环境变量读取后拼接比较
-3. **生成 `state.local.json`**（路径：`D:\001_Software\skillsList\state.local.json`）：
+3. **生成 `state.local.json`**（路径：`D:\001_Software\env-manifest\state.local.json`）：
    - 复制 `state.template.json` 为骨架
    - 用体检结果填充所有字段
    - 加上"日期"和"机器标识"
@@ -64,7 +64,7 @@
 
 ## 场景 1：安装（写，状态机驱动）
 
-**用户说"按 skillsList 安装"** → AI 执行：
+**用户说"按 env-manifest 安装"** → AI 执行：
 
 1. **必须有 `state.local.json`**：若不存在，先自动跑场景 0 生成。
 2. **对照 `state.template.json` 字段 + `state.local.json` 当前值，列出待办**：
@@ -106,9 +106,9 @@
 
 ## 场景 2：同步（写，差异驱动）
 
-**用户说"按 skillsList 同步"** → AI 执行：
+**用户说"按 env-manifest 同步"** → AI 执行：
 
-1. `cd D:\001_Software\skillsList && git pull --ff-only`
+1. 进入本地克隆目录（`state.local.json` 的 `repo.local_clone_path`，新机器上由场景 0 确定）执行 `git pull --ff-only`
 2. 按场景 0 的无脚本方式重新体检，刷新 `state.local.json`
 3. 对比新旧两份 `state.local.json`，列出 diff：
    - 新增项
@@ -124,10 +124,10 @@
 
 ## 场景 3：定时（注册，不建 shell 任务）
 
-**用户说"每天 9 点同步 skillsList"** → AI 执行：
+**用户说"每天 9 点同步 env-manifest"** → AI 执行：
 
 1. 用 AI 客户端**自身的定时任务能力**注册每日任务（如 Cursor automations / ZCode automations / Codex schedule prompt）：
-   - 任务名：`skillsList 每日同步`
+   - 任务名：`env-manifest 每日同步`
    - 触发：每天 09:00（用户未指定则用此默认）
    - 内容：执行场景 2 的 6 步
 2. **不**创建 shell 脚本、**不**创建系统级计划任务、**不**写入 `taskschd.msc`。
@@ -137,7 +137,7 @@
 
 ## 场景 4：上传（写仓库，不直接 push）
 
-**用户说"把新技能/修改收录进 skillsList"** → AI 执行：
+**用户说"把新技能/修改收录进 env-manifest"** → AI 执行：
 
 1. 自研技能：把技能目录放进 `skills/<名称>/`（含 `SKILL.md`）
 2. 清单变更：更新 `SKILLS_GUIDE.md` 对应角色小节
