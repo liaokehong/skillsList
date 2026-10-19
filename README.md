@@ -20,7 +20,7 @@
 
 ## 💬 人类怎么用
 
-把下面的话发给你的 AI 编码助手（ZCode / Cursor / Codex / Claude 等）：
+把下面的话发给你的 AI 编码助手（ZCode / Cursor / Codex 等）：
 
 ```text
 帮我按照 https://github.com/liaokehong/skillsList 配置这台电脑（先体检再装）

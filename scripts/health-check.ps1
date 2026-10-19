@@ -117,7 +117,6 @@ try {
     }
 } catch {}
 $result.ai_clients.Codex = Get-AIClient -ExePath $codexExe -ConfigDir 'C:\Users\Dell\.codex' -SkillsRel '.codex\skills'
-$result.ai_clients.Claude = Get-AIClient -ExePath 'C:\Users\Dell\AppData\Local\Programs\Claude\Claude.exe' -ConfigDir 'C:\Users\Dell\.claude' -SkillsRel '.claude\skills'
 
 $result.software.lm_studio   = Get-SoftwareEntry -ExePath 'D:\001_Software\004_LM-Studio\LM Studio\LM Studio.exe' -ModelDir 'D:\001_Software\_models\lm-studio'
 $result.software.ollama      = Get-SoftwareEntry -ExePath 'D:\001_Software\_models\ollama\ollama.exe' -ModelDir 'D:\001_Software\_models\ollama'
@@ -242,7 +241,7 @@ foreach ($tool in 'git','node','npm','python','uv') {
         $issues += [pscustomobject]@{ level='missing'; kind='missing'; target=$tool; detail='required base toolkit not installed' }
     }
 }
-foreach ($c in 'Cursor','ZCode','Codex','Claude') {
+foreach ($c in 'Cursor','ZCode','Codex') {
     $cl = $result.ai_clients.$c
     if ($cl.installed -and -not $cl.skills_path) {
         $issues += [pscustomobject]@{ level='path'; kind='path'; target=$c; detail='installed but skills_path missing' }
@@ -250,7 +249,7 @@ foreach ($c in 'Cursor','ZCode','Codex','Claude') {
 }
 foreach ($name in $result.skills.self_skills.PSObject.Properties.Name) {
     $s = $result.skills.self_skills.$name
-    foreach ($c in 'Cursor','ZCode','Codex','Claude') {
+    foreach ($c in 'Cursor','ZCode','Codex') {
         $cl = $result.ai_clients.$c
         if ($cl.installed -and ($s.synced_to -notcontains $c)) {
             $issues += [pscustomobject]@{ level='sync'; kind='sync'; target=($name + '@' + $c); detail='self skill not synced to installed client' }

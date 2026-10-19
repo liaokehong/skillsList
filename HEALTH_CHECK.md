@@ -43,7 +43,7 @@ AI 助手可以**不跑脚本**，自己用 OS 命令逐项查。但**最终产�
 | 系统 | OS / 版本 / 架构 | Windows / macOS / Linux 都查 |
 | 磁盘 | 各盘 total/used/free，标 system vs data | C 盘是系统盘，D 盘起为数据盘 |
 | 基础开发套件 | git / node / npm / python / uv / docker | 必装 vs 按需装 |
-| AI 客户端 | Cursor / ZCode / Codex / Claude | 各自版本 + skills 目录 |
+| AI 客户端 | Cursor / ZCode / Codex | 各自版本 + skills 目录 |
 | 业务软件 | LM Studio / Ollama / PyCharm / VSCode / Firecrawl / FFmpeg / PowerToys | 大多按需 |
 | 路径 | 软件根 / 下载 / 缓存 / 模型 / bin | 是否落在约定目录 |
 | 环境变量 | 16 个缓存/模型变量 | 是否重定向到约定目标 |
@@ -118,7 +118,7 @@ AI:  已生成报告
 AI:  (基于 state.local.json 列出待办)
      1. 装 node / npm / python / uv → 落 D 盘
      2. 设 2 个未设的环境变量
-     3. 同步自研 skills 到 Cursor / ZCode / Codex / Claude
+     3. 同步自研 skills 到 Cursor / ZCode / Codex
      4. 装 13 个远端 skills
      高风险项：需新建 _caches/cargo 和 _caches/rustup
      是否继续？

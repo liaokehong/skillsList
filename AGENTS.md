@@ -162,7 +162,7 @@
 | 系统 | OS、CPU、RAM |
 | 磁盘 | 各盘 total/used/free，标记系统盘 |
 | 基础开发套件 | git / node / npm / python / uv / docker |
-| AI 客户端 | Cursor / ZCode / Codex / Claude（版本 + skills 目录） |
+| AI 客户端 | Cursor / ZCode / Codex（版本 + skills 目录） |
 | 业务软件 | LM Studio / Ollama / PyCharm / VSCode / Firecrawl / FFmpeg / PowerToys |
 | 路径 | 软件根、下载、缓存、模型、bin 是否落在约定目录 |
 | 环境变量 | 16 个缓存/模型变量是否已重定向到 D 盘 |

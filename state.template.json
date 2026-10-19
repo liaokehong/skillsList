@@ -34,8 +34,7 @@
   "ai_clients": {
     "Cursor": { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
     "ZCode":  { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
-    "Codex":  { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null },
-    "Claude": { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null }
+    "Codex":  { "installed": null, "version": null, "exe_path": null, "config_dir": null, "skills_path": null, "skill_count": null }
   },
 
   "software": {

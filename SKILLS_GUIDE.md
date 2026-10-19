@@ -25,14 +25,13 @@
 
 ### 为什么
 
-我的电脑上同时有 Cursor / ZCode / Codex / Claude（按需）。我在不同客户端之间切着用。每个客户端的 skills 目录不同：
+我的电脑上同时有 Cursor / ZCode / Codex(各客户端按需启用)。我在不同客户端之间切着用。每个客户端的 skills 目录不同：
 
 | 客户端 | skills 目录 |
 |---|---|
 | Cursor | `%USERPROFILE%\.cursor\skills\` |
 | ZCode | `%USERPROFILE%\.zcode\skills\` |
 | Codex | `%USERPROFILE%\.codex\skills\` |
-| Claude | `%USERPROFILE%\.claude\skills\` |
 
 具体路径在每台机器的 `state.local.json` 里（体检得到），**不能硬编码**。
 
@@ -41,15 +40,15 @@
 1. **自研 skill**（`skills/<name>/`）：从仓库 `skills/<name>/` 拷贝到每个已装客户端的 skills 目录。
 2. **远端 skill**（来自 skills.sh 生态）：先 `npx skills add <repo>@<skill> -g` 装到第一个客户端，再 copy 到其他已装客户端。
 3. **同步后必须验证**：每个目标目录的 `SKILL.md` 都存在且内容一致。
-4. **失败项跳过**：某个客户端目录不存在（如 Claude 没装）→ 跳过，汇总报告里写明"未同步：Claude 未安装"。
+4. **失败项跳过**：某个客户端目录不存在（如某客户端未装）→ 跳过，汇总报告里写明"未同步：<客户端名> 未安装"。
 
 ### 体检时怎么查
 
 体检脚本 `scripts/health-check.ps1` 会对每个 skill 列出它在哪些客户端存在：
 
 ```text
-clarify-first: Cursor✅ ZCode✅ Codex❌ Claude✅
-product-design: Cursor✅ ZCode✅ Codex❌ Claude✅
+clarify-first: Cursor❌ ZCode✅ Codex✅
+product-design: Cursor❌ ZCode✅ Codex✅
 ```
 
 如果发现某个客户端缺了，状态报告会标 ❌，场景 1/2 会自动补齐。
