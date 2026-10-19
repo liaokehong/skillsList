@@ -77,11 +77,17 @@
     "OLLAMA_MODELS":         { "expected": "_models\\ollama",           "actual": null, "ok": null }
   },
 
+  "preferences": {
+    "source": "PREFERENCES.md",
+    "internalized_to_clients": null
+  },
+
   "skills": {
     "_sync_rule": "Every skill in this list must exist in EVERY installed AI client's skills_path with identical SKILL.md content. First run: full check + install missing. Daily: diff-driven, only add/update changed items.",
     "self_skills": {
       "clarify-first":  { "source": "skills/clarify-first",  "synced_to": [] },
-      "product-design": { "source": "skills/product-design", "synced_to": [] }
+      "product-design": { "source": "skills/product-design", "synced_to": [] },
+      "c-disk-cleanup": { "source": "skills/c-disk-cleanup", "synced_to": [] }
     },
     "remote_skills": {
       "frontend-design":       { "source": "anthropics/skills@frontend-design",        "synced_to": [] },

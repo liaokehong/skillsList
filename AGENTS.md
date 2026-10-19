@@ -11,7 +11,7 @@
 当用户**用任何方式提到本仓库**（"按 env-manifest 装一下"、"按 env-manifest 同步"、"按 env-manifest 体检"、"按 env-manifest 配置这台电脑"）时，**按下文 5 个场景执行，不要反复问用户"你要干什么"**。新电脑从 GitHub 地址开始，先取得仓库并读取本文件，再体检本机。遇到失败项跳过，最后汇总。
 
 ⚠️ **常见误判纠正**：
-- 本仓库**不是技能包**——`skills/` 目录里只有 2 个自研技能，其余 14 个技能（设计、动效、agent-browser、find-skills、self-improving-agent 等）需从远程注册表（skills.sh / npm）安装。
+- 本仓库**不是技能包**——`skills/` 目录里只有 3 个自研技能，其余 14 个技能（设计、动效、agent-browser、find-skills、self-improving-agent 等）需从远程注册表（skills.sh / npm）安装。
 - 本仓库**不含任何脚本**——体检、安装、同步全部由 AI 客户端内的助手读取本文件和 `state.template.json` 后，按本机实际情况自行设计步骤完成；不存在 `install.sh` / `setup.ps1` / `health-check.ps1` 之类的固定入口。
 - 本仓库**不是单机器配置**——所有机器共用本仓库，但每台机器的路径、已装软件、缓存目录都是各自体检得到的，不能硬编码到模板里。
 
@@ -72,6 +72,7 @@
    - AI 客户端缺失 → 提示用户在编辑器市场装（不自动装）
    - 缓存/模型环境变量未设 → 按 `state.template.json` 的 `env_vars` 表逐个设置为用户级变量（目标 = 本机软件根目录 + `expected` 相对路径），需要时追加 PATH；注册表 / PATH 修改先列影响给用户确认
    - skills 未同步到任何客户端 → 按"技能同步到所有客户端"规则装
+   - PREFERENCES.md 未内化 → 把用户习惯写入每个已装客户端的持久记忆机制（用户级 AGENTS.md / 客户端 memory），并在 `state.local.json` 的 `preferences.internalized_to_clients` 记录
 3. **逐项确认高风险动作**（必须列出来用户确认）：
    - 装在 C 盘的工具要移 D 盘
    - 修改注册表 / PATH
@@ -114,6 +115,7 @@
    - 新增项
    - 删除项
    - 变化项（版本/路径）
+   - 用户偏好变更（PREFERENCES.md）→ 刷新各已装客户端的持久记忆
 4. 询问用户："是否按 diff 执行同步？"
 5. 确认后只改变动项，不动未变的项。
 6. 汇报：本轮新增/更新/失败/跳过的清单。
@@ -175,6 +177,7 @@
 | 环境变量 | 16 个缓存/模型变量是否已重定向到 D 盘 |
 | 网络 | GitHub / npm 可达性，镜像是否设置 |
 | 仓库 | 本地是否已克隆、与 origin/main 同步状态 |
+| 用户偏好 | PREFERENCES.md 是否已内化到各客户端持久记忆 |
 
 `state.local.json` 生成时**只填体检结果**，**不填推测值**——查不到就标 `null` 而非编造。
 

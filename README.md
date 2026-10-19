@@ -2,7 +2,7 @@
 
 > **个人开发环境与 AI 技能清单**。规则统一，机器状态各自不同——所有机器共用本仓库，每台机器的本地状态在 `state.local.json`（不进 Git）。
 >
-> 核心文件：[`AGENTS.md`](./AGENTS.md)（AI 执行指令）· [`SKILLS_GUIDE.md`](./SKILLS_GUIDE.md)（技能清单）· [`HEALTH_CHECK.md`](./HEALTH_CHECK.md)（体检流程）· [`state.template.json`](./state.template.json)（检查模板）
+> 核心文件：[`AGENTS.md`](./AGENTS.md)（AI 执行指令）· [`SKILLS_GUIDE.md`](./SKILLS_GUIDE.md)（技能清单）· [`HEALTH_CHECK.md`](./HEALTH_CHECK.md)（体检流程）· [`state.template.json`](./state.template.json)（检查模板）· [`PREFERENCES.md`](./PREFERENCES.md)（用户习惯）
 
 ## 🤖 AI 助手请先读
 
@@ -16,7 +16,7 @@
 | 3 定时 | "每天同步 env-manifest" | 注册 |
 | 4 上传 | "把新技能收录进 env-manifest" | 写仓库 |
 
-⚠️ 本仓库是**清单 + 检查模板**，不含任何脚本——体检、安装、同步由 AI 读 [AGENTS.md](./AGENTS.md) 和 `state.template.json` 按本机情况自行设计步骤执行。`skills/` 目录只有 2 个自研技能，其余 14 个技能需要从远程注册表（skills.sh / npm）安装。
+⚠️ 本仓库是**清单 + 检查模板**，不含任何脚本——体检、安装、同步由 AI 读 [AGENTS.md](./AGENTS.md) 和 `state.template.json` 按本机情况自行设计步骤执行。`skills/` 目录只有 3 个自研技能，其余 14 个技能需要从远程注册表（skills.sh / npm）安装。
 
 ## 💬 人类怎么用
 
@@ -53,9 +53,11 @@ env-manifest/
 ├── SKILLS_GUIDE.md           ← 完整技能清单（按角色 → 工作流）
 ├── HEALTH_CHECK.md           ← 体检流程文档
 ├── state.template.json       ← 检查清单模板（进 Git）
+├── PREFERENCES.md            ← 用户习惯唯一事实源（进 Git）
 ├── skills/                   ← 自研技能（随仓库分发）
 │   ├── product-design/
-│   └── clarify-first/
+│   ├── clarify-first/
+│   └── c-disk-cleanup/
 └── LICENSE
 ```
 
