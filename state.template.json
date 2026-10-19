@@ -1,9 +1,7 @@
 {
-  "$schema": "./state.template.schema.json",
   "_comment": [
     "This file is the inspection checklist template. It is committed to Git.",
     "Each machine generates its own state.local.json from this template (NOT committed, see .gitignore).",
-    "Field definitions: see state.template.schema.json (optional).",
     "Actual values are filled in by the AI assistant (AGENTS.md scenario 0): read this template, inspect each field with OS commands designed for the local machine. No script involved.",
     "Do NOT put any machine-specific data in this file: hostname, absolute paths, actual exe paths, actual version numbers are all forbidden.",
     "Default value is null (unknown), NOT false (not satisfied). Only set true/false when confirmed by lookup."

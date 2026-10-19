@@ -24,5 +24,6 @@
 ## Windows 细节
 
 - PowerShell 脚本含中文时保存为带 BOM 的 UTF-8 或纯 ASCII（避免 PS5.1 乱码）
+- PowerShell 5.1 读取无 BOM 的 UTF-8 文件（如 JSON）必须加 `-Encoding UTF8`，否则按 GBK 解码中文会乱码甚至解析失败；对 JSON 校验优先用 `node -e "JSON.parse(...)"`
 - 在 Git Bash 里拼 Windows 路径/变量易踩 `$` 与反斜杠转义坑：优先整段单引号交给 PowerShell 处理
 - 批量删除前先确认目标真实存在与大小，防止路径变量展开错误
