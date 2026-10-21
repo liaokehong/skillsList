@@ -54,6 +54,7 @@ env-manifest/
 ├── HEALTH_CHECK.md           ← 体检流程文档
 ├── state.template.json       ← 检查清单模板（进 Git）
 ├── PREFERENCES.md            ← 用户习惯唯一事实源（进 Git）
+├── LESSONS.md                ← 每日复盘沉淀的技巧与踩坑时间线（进 Git）
 ├── skills/                   ← 自研技能（随仓库分发）
 │   ├── product-design/
 │   ├── clarify-first/
