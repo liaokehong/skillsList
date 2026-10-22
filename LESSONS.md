@@ -17,3 +17,14 @@ skills CLI（`npx skills add -g`）的做法值得沿用：真身只放 `~\.agen
 ## 2026-10-21 · C 盘以约 2.2G/天 的速度流失（待定位）
 
 10-19 剩 18G → 10-20 剩 15.2G → 10-21 剩 13.6G，已破 15G 红线。已知排除项：16 个重定向环境变量全部生效、D 盘五件套正常。增长大头不在 watch 列表（Downloads/Temp/.cache 只占 ~10.5G 且基本稳定），候选：Windows 更新/还原点、pagefile/hiberfil 波动、某应用持续写 C 盘。已具备 c-disk-cleanup 技能，待跑阶段一分析定位。
+
+## 2026-10-22 · 公开仓库 push 前保密扫描的实操命令
+
+规则在 PREFERENCES.md（push 前必做），实操三步（仓库目录下，约 30 秒）：
+
+1. **文件白名单**：`git diff --stat origin/<分支>..HEAD` —— 逐个核对只含预期文件，出现意外文件即停；
+2. **敏感内容扫描**：`git grep -n -E "DESKTOP-|主机名|工号|内部域名" HEAD -- "*.md" "*.json"` —— 无输出才通过（正则按需扩充组织标识词表）；
+3. **机器状态文件核查**：`git ls-files | grep state.local` 应为空——`.gitignore` 已排除，防止日后被误 `git add -f`。
+
+首跑结果：三步全过，推送了 3 个提交；本条目与规则本身即该次沉淀的产物。
+
