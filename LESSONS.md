@@ -28,3 +28,10 @@ skills CLI（`npx skills add -g`）的做法值得沿用：真身只放 `~\.agen
 
 首跑结果：三步全过，推送了 3 个提交；本条目与规则本身即该次沉淀的产物。
 
+## 2026-10-23 · 自动化环境里 git 突报 dubious ownership
+
+现象：每日自动化例行 `git pull` 突然失败——`fatal: detected dubious ownership in repository at 'D:/001_Software/env-manifest'`，前一天还正常。原因：仓库目录所有者与执行进程凭证不一致（git ≥2.35.2 的安全防护；本机疑似系统进程/杀软动过 ACL）。
+解法（一次性，写用户级 `~/.gitconfig`）：`git config --global --add safe.directory D:/001_Software/env-manifest`。
+排查提示：若报错提到的不是自己的仓库路径，先核实目录再添加例外，不要无脑加 `*`。
+
+
