@@ -11,8 +11,8 @@
 ## 存储分层（四层分工，2026-10-24 起）
 
 - **热 · C**（系统 SSD 分区）：只放 OS 和轻量配置，只求瘦身（c-disk-cleanup 维护）
-- **温 · D**（数据 SSD 分区）：软件、单文件工具、活跃缓存（`_caches`）、进行中项目——活跃读写追 SSD
-- **冷 · G**（机械 HDD，大容量）：模型权重（`G:\_models\`，HF_HOME / MODELSCOPE_CACHE / TORCH_HOME / OLLAMA_MODELS 四变量直指 G）、**下载与文档等用户文件夹（`G:\UserFiles\`，注册表 User Shell Folders 已重定向；桌面留 C）**、下载长期归档（`G:\_archive\downloads`）、完结项目归档（`G:\_archive\projects`）、本机备份——"写一次读多次"的大体积放这里
+- **温 · D**（数据 SSD 分区）：软件、单文件工具、活跃缓存（`_caches`）、**活跃模型权重（`_models\`，HF_HOME / MODELSCOPE_CACHE / TORCH_HOME / OLLAMA_MODELS 四变量指 D——2026-10-24 修订：HDD 拖慢模型加载与推理，模型暂不落冷层，待性能验证后再议）**、进行中项目——活跃读写追 SSD
+- **冷 · G**（机械 HDD，大容量）：**下载与文档等用户文件夹（`G:\UserFiles\`，注册表 User Shell Folders 已重定向；桌面留 C）**、下载长期归档（`G:\_archive\downloads`）、完结项目归档（`G:\_archive\projects`）、不活跃模型权重的冷备（`G:\_models\`，仅归档位，环境变量不指向它）、本机备份——"写一次读多次"的大体积放这里
 - **网 · Z**（局域网共享盘）：重要资料的备份副本；不放活跃数据与缓存（内网路径不入公开库）
 
 各机实际盘符与路径以 `state.local.json` 的 `paths` 为准。
