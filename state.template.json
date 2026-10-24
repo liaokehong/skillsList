@@ -4,7 +4,8 @@
     "Each machine generates its own state.local.json from this template (NOT committed, see .gitignore).",
     "Actual values are filled in by the AI assistant (AGENTS.md scenario 0): read this template, inspect each field with OS commands designed for the local machine. No script involved.",
     "Do NOT put any machine-specific data in this file: hostname, absolute paths, actual exe paths, actual version numbers are all forbidden.",
-    "Default value is null (unknown), NOT false (not satisfied). Only set true/false when confirmed by lookup."
+    "Default value is null (unknown), NOT false (not satisfied). Only set true/false when confirmed by lookup.",
+    "Model env vars (HF_HOME, MODELSCOPE_CACHE, TORCH_HOME, OLLAMA_MODELS) resolve their 'expected' against paths.models_root, which may live on a separate cold-storage drive (e.g. HDD), not necessarily under software_root."
   ],
   "generated_by": "AI assistant per AGENTS.md scenario 0",
   "generated_at": null,

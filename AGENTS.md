@@ -43,7 +43,7 @@
 2. **执行只读体检（AI 自主设计步骤，无脚本）**：
    - 读 `state.template.json`，按字段清单逐项检查：系统、磁盘、基础套件、AI 客户端、业务软件、路径、环境变量、网络、仓库、技能同步
    - 检查命令由 AI 根据本机情况选择（Windows 用 `where` / `Get-Command` / `Get-PSDrive` / 注册表查询，macOS/Linux 用 `which` / `df` 等）；查不到的项填 `null`，不推测、不标 `false`
-   - 环境变量以模板 `env_vars` 表为准：`expected` 是相对软件根目录的约定路径，`actual` 从用户级环境变量读取后拼接比较
+   - 环境变量以模板 `env_vars` 表为准：`expected` 是相对软件根目录的约定路径，`actual` 从用户级环境变量读取后拼接比较（例外：模型类变量 HF_HOME / MODELSCOPE_CACHE / TORCH_HOME / OLLAMA_MODELS 的 `expected` 相对 `paths.models_root` 解析——models_root 可位于独立的冷数据盘/机械盘）
 3. **生成 `state.local.json`**（与 `state.template.json` 同目录，即仓库根）：
    - 复制 `state.template.json` 为骨架
    - 用体检结果填充所有字段

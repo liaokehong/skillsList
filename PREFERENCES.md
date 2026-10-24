@@ -8,6 +8,15 @@
 - 便携版 > 安装器；单文件工具进软件根的 `bin`；一切"会长大"的（缓存/模型/下载）落数据盘——各机实际路径以 `state.local.json` 的 `paths` 为准
 - 镜像不全局写死，按项目/按需开（网络慢时：pip→aliyun、npm→npmmirror、HuggingFace→hf-mirror）
 
+## 存储分层（四层分工，2026-10-24 起）
+
+- **热 · C**（系统 SSD 分区）：只放 OS 和轻量配置，只求瘦身（c-disk-cleanup 维护）
+- **温 · D**（数据 SSD 分区）：软件、单文件工具、活跃缓存（`_caches`）、下载暂存（`_downloads`）、进行中项目——活跃读写追 SSD
+- **冷 · G**（机械 HDD，大容量）：模型权重（`G:\_models\`，HF_HOME / MODELSCOPE_CACHE / TORCH_HOME / OLLAMA_MODELS 四变量直指 G）、下载长期归档（`G:\_archive\downloads`）、完结项目归档（`G:\_archive\projects`）、本机备份——"写一次读多次"的大体积放这里
+- **网 · Z**（局域网共享盘）：重要资料的备份副本；不放活跃数据与缓存（内网路径不入公开库）
+
+各机实际盘符与路径以 `state.local.json` 的 `paths` 为准。
+
 ## 协作风格
 
 - 目标明确且有常规方案：直接选默认方案执行，完成后汇报"选了什么、为什么"；仅不可逆/破坏性操作、真正的范围变更、纯偏好才询问
