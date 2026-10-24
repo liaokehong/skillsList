@@ -36,4 +36,15 @@ skills CLI（`npx skills add -g`）的做法值得沿用：真身只放 `~\.agen
 解法（一次性，写用户级 `~/.gitconfig`）：`git config --global --add safe.directory D:/001_Software/env-manifest`。
 排查提示：若报错提到的不是自己的仓库路径，先核实目录再添加例外，不要无脑加 `*`。
 
+## 2026-10-24 · Windows 用户文件夹重定向到数据盘的正确姿势
+
+目标：下载/文档等默认位置迁 G 盘（C 盘减负 + 用户数据归冷存储）。四步：
+
+1. **前置检查**：读注册表 `HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 确认当前指向；**OneDrive 若已接管（路径含 OneDrive）不可直接改**，先解除同步；
+2. **搬数据**：`robocopy <源> <目标> /E /MOVE /R:1 /W:1`——被占用文件会留下并计数，不硬来；
+3. **改注册表**：User Shell Folders（ExpandString）与 Shell Folders（String）两处都写，Downloads 的键名是 GUID `{374DE290-123F-4565-9164-39C4925E467B}`；
+4. **重启 explorer** 生效；浏览器若设过自定义下载路径需手动改回"默认"。
+
+桌面**不迁**（高频活跃，留 SSD）。本次 Downloads / Documents / Pictures / Videos / Music 五个全迁，零锁定残留。
+
 
